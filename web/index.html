@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BalancedBird - Weight & Balance App</title>
+</head>
+<body>
+
+<h1>BalancedBird - Weight & Balance App</h1>
+
+
+<h2>Weight & Balance</h2>
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Weight(lbs)</th>
+        <th>Arm-CG(in)</th>
+        <th>Moment(lbs-in)</th>
+    </tr>
+    <tr>
+        <td>Empty Wt.</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Front Seats</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Middle Seats</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Rear Seats</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Baggage 1</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Baggage 2</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Zero Fuel Wt.</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Fuel</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Ramp Wt.</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>T/O Wt.</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Est. Fuel Burn</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Est. LDG Wt.</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+</table>
+
+<h2>Limits</h2>
+
+<table>
+    <tr>
+        <td>Max T/O Wt.</td>
+        <td>0</td>
+        <td>Max LDG Wt.</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>T/O CG fwd/aft</td>
+        <td>0</td>
+        <td>LDG CG fwd/</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Zero Fueld CG fwd/aft</td>
+        <td>0</td>
+        <td>Demo. Crosswind</td>
+        <td>0</td>
+    </tr>
+</table>
+
+    <h2>Current Conditions</h2>
+
+    <h3>Input ICAO Airport Identifier</h3>
+    <p>Weather information will be automatically acquired from the FAA.</p>
+    <input placeholder="KDTO">
+
+    <table>
+        <tr>
+            <td>Observation UTC</td>
+            <td>0</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Observation Local</td>
+            <td>0</td>
+            <td>Crosswind</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Surface Wind</td>
+            <td>0</td>
+            <td>Headwind</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Vis / Weather</td>
+            <td>0</td>
+            <td>Field Elevation</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Temp / Dew Pt.</td>
+            <td>0</td>
+            <td>Pressure Alt.</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Altimeter</td>
+            <td>0</td>
+            <td>Density Alt.</td>
+            <td>0</td>
+        </tr>
+
+</table>
+
+<h2>Performance Profile</h2>
+
+<table>
+    <tr>
+        <td>Expected Runway</td>
+        <td></td>
+        <td>Runway Length</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Observation Time Local</td>
+        <td>0</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>T/O CG fwd/aft</td>
+        <td>0</td>
+        <td>LDG CG fwd/</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>Zero Fueld CG fwd/aft</td>
+        <td>0</td>
+        <td>Demo. Crosswind</td>
+        <td>0</td>
+    </tr>
+
+</table>
+
+<h2>Maintenance Status</h2>
+<p>Not all columns are needed for everyone. Ignore unneeded columns.</p>
+
+<table>
+    <tr>
+        <td>Time to next MX</td>
+        <td>50hr</td>
+        <td>100hr</td>
+        <td>AD</td>
+
+        <td></td>
+    </tr>
+    <tr>
+        <td>Days to next MX</td>
+        <td>AD:</td>
+        <td>Annual:</td>
+        <td>Regist:</td>
+    </tr>
+</table>
+
+<h2>Aircraft Reference Speeds SE/ME</h2>
+<p>Some columns may remain empty for your aircraft profile.</p>
+
+<table>
+    <tr>
+        <td>Time to next MX</td>
+        <td>50hr</td>
+        <td>100hr</td>
+        <td>AD</td>
+
+        <td></td>
+    </tr>
+    <tr>
+        <td>Days to next MX</td>
+        <td>AD:</td>
+        <td>Annual:</td>
+        <td>Regist:</td>
+    </tr>
+</table>
+
+Have a safe flight!
+
+
+<footer>
+    <p>Developed by David Stevens</p>
+    <p>License: GPLv3</p>
+    <p>GitHub Repository: </p>
+</footer>
+
+
+</body>
+</html>
