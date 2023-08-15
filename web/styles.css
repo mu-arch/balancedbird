@@ -56,8 +56,14 @@ header {
     padding: 30px 0;
 }
 
+header p {
+    width: 650px;
+    line-height: 25px;
+}
+
 h1 {
     font-size: 30px;
+    padding-bottom: 10px;
 }
 
 .table-wrapper {
@@ -72,6 +78,10 @@ h1 {
 table {
     width: 100%;
     border-spacing: 0;
+}
+
+thead {
+    border-bottom: 1px solid #d7d7d7;
 }
 
 th {
@@ -145,7 +155,7 @@ section {
 }
 
 .wb tbody:nth-child(2) {
-    border-top: 10px solid #fff;
+
     border-bottom: 20px solid #fff;
 }
 
@@ -166,5 +176,4 @@ section {
 
 .wb tbody:nth-child(4) tr:last-child {
     background-color: var(--highlight);
-    border-bottom: 20px solid #fff;
 }

@@ -9,19 +9,48 @@
 
 <header>
     <h1>BalancedBird - Weight & Balance App</h1>
-    <p></p>
+    <p>This program will help you quickly complete weight and balance calculations. Choose a preset aircraft type below, or start from scratch. Always consult your aircraft's POH for accurate values.</p>
 </header>
 
 <section>
-    <h2>1. Weight & Balance</h2>
+    <h2>1. Limits</h2>
+
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <td>Max T/O Wt.</td>
+                <td>0</td>
+                <td>Max LDG Wt.</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>T/O CG fwd/aft</td>
+                <td>0</td>
+                <td>LDG CG fwd/</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Zero Fueld CG fwd/aft</td>
+                <td>0</td>
+                <td>Demo. Crosswind</td>
+                <td>0</td>
+            </tr>
+        </table>
+    </div>
+</section>
+
+<section>
+    <h2>2. Weight & Balance</h2>
     <div class="table-wrapper wb">
         <table>
+            <thead>
             <tr>
                 <th>Type</th>
                 <th>Weight(lbs)</th>
                 <th>Arm-CG (in)</th>
                 <th>Moment (lbs-in)</th>
             </tr>
+            </thead>
             <tbody>
             <tr>
                 <td>Empty Wt.</td>
@@ -80,16 +109,16 @@
                 <td><input type="number" placeholder="0"></td>
             </tr>
             <tr>
-                <td>Startup/Taxi Fuel</td>
+                <td>Start/Taxi Fuel</td>
                 <td><input type="number" placeholder="0"></td>
                 <td><input type="number" placeholder="0"></td>
                 <td><input type="number" placeholder="0"></td>
             </tr>
             <tr>
                 <td>T/O Wt.</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
+                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
+                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
+                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
             </tr>
             </tbody>
             <tbody>
@@ -101,38 +130,11 @@
             </tr>
             <tr>
                 <td>Est. LDG Wt.</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
+                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
+                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
+                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
             </tr>
             </tbody>
-        </table>
-    </div>
-</section>
-
-<section>
-    <h2>2. Limits</h2>
-
-    <div class="table-wrapper">
-        <table>
-            <tr>
-                <td>Max T/O Wt.</td>
-                <td>0</td>
-                <td>Max LDG Wt.</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>T/O CG fwd/aft</td>
-                <td>0</td>
-                <td>LDG CG fwd/</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>Zero Fueld CG fwd/aft</td>
-                <td>0</td>
-                <td>Demo. Crosswind</td>
-                <td>0</td>
-            </tr>
         </table>
     </div>
 </section>
@@ -142,7 +144,7 @@
 
     <h3>Input ICAO Airport Identifier</h3>
     <p>Weather information will be automatically acquired from the FAA.</p>
-    <input placeholder="KDTO">
+    <input placeholder="Ex. KDTO">
 
     <div class="table-wrapper">
         <table>
@@ -223,7 +225,7 @@
 
 <section>
     <h2>5. Maintenance Status</h2>
-    <p>Not all columns are needed for everyone. Ignore unneeded columns.</p>
+    <p>Not all columns are needed. Ignore unneeded columns.</p>
 
     <div class="table-wrapper">
         <table>
