@@ -3,232 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <title>BalancedBird - Weight & Balance App</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<h1>BalancedBird - Weight & Balance App</h1>
+<header>
+    <h1>BalancedBird - Weight & Balance App</h1>
+    <p></p>
+</header>
 
+<section>
+    <h2>1. Weight & Balance</h2>
+    <div class="table-wrapper wb">
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Weight(lbs)</th>
+                <th>Arm-CG (in)</th>
+                <th>Moment (lbs-in)</th>
+            </tr>
+            <tbody>
+            <tr>
+                <td>Empty Wt.</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Front Seats</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Middle Seats</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Rear Seats</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Baggage 1</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Baggage 2</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Zero Fuel Wt.</td>
+                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
+                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
+                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td>Fuel</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Ramp Wt.</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Startup/Taxi Fuel</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>T/O Wt.</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td>Est. Fuel Burn</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Est. LDG Wt.</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
 
-<h2>Weight & Balance</h2>
-<table>
-    <tr>
-        <th>Type</th>
-        <th>Weight(lbs)</th>
-        <th>Arm-CG(in)</th>
-        <th>Moment(lbs-in)</th>
-    </tr>
-    <tr>
-        <td>Empty Wt.</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Front Seats</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Middle Seats</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Rear Seats</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Baggage 1</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Baggage 2</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Zero Fuel Wt.</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Fuel</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Ramp Wt.</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>T/O Wt.</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Est. Fuel Burn</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Est. LDG Wt.</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-    </tr>
-</table>
+<section>
+    <h2>2. Limits</h2>
 
-<h2>Limits</h2>
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <td>Max T/O Wt.</td>
+                <td>0</td>
+                <td>Max LDG Wt.</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>T/O CG fwd/aft</td>
+                <td>0</td>
+                <td>LDG CG fwd/</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Zero Fueld CG fwd/aft</td>
+                <td>0</td>
+                <td>Demo. Crosswind</td>
+                <td>0</td>
+            </tr>
+        </table>
+    </div>
+</section>
 
-<table>
-    <tr>
-        <td>Max T/O Wt.</td>
-        <td>0</td>
-        <td>Max LDG Wt.</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>T/O CG fwd/aft</td>
-        <td>0</td>
-        <td>LDG CG fwd/</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Zero Fueld CG fwd/aft</td>
-        <td>0</td>
-        <td>Demo. Crosswind</td>
-        <td>0</td>
-    </tr>
-</table>
-
-    <h2>Current Conditions</h2>
+<section>
+    <h2>3. Current Conditions</h2>
 
     <h3>Input ICAO Airport Identifier</h3>
     <p>Weather information will be automatically acquired from the FAA.</p>
     <input placeholder="KDTO">
 
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <td>Observation UTC</td>
+                <td>0</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Observation Local</td>
+                <td>0</td>
+                <td>Crosswind</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Surface Wind</td>
+                <td>0</td>
+                <td>Headwind</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Vis / Weather</td>
+                <td>0</td>
+                <td>Field Elevation</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Temp / Dew Pt.</td>
+                <td>0</td>
+                <td>Pressure Alt.</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Altimeter</td>
+                <td>0</td>
+                <td>Density Alt.</td>
+                <td>0</td>
+            </tr>
+
+        </table>
+    </div>
+</section>
+
+</section>
+<h2>4. Performance Profile</h2>
+
+<div class="table-wrapper">
     <table>
         <tr>
-            <td>Observation UTC</td>
+            <td>Expected Runway</td>
+            <td></td>
+            <td>Runway Length</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Observation Time Local</td>
             <td>0</td>
             <td></td>
             <td></td>
         </tr>
         <tr>
-            <td>Observation Local</td>
+            <td>T/O CG fwd/aft</td>
             <td>0</td>
-            <td>Crosswind</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Surface Wind</td>
-            <td>0</td>
-            <td>Headwind</td>
+            <td>LDG CG fwd/</td>
             <td>0</td>
         </tr>
         <tr>
-            <td>Vis / Weather</td>
+            <td>Zero Fueld CG fwd/aft</td>
             <td>0</td>
-            <td>Field Elevation</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>Temp / Dew Pt.</td>
-            <td>0</td>
-            <td>Pressure Alt.</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>Altimeter</td>
-            <td>0</td>
-            <td>Density Alt.</td>
+            <td>Demo. Crosswind</td>
             <td>0</td>
         </tr>
 
-</table>
+    </table>
+</div>
+</section>
 
-<h2>Performance Profile</h2>
+<section>
+    <h2>5. Maintenance Status</h2>
+    <p>Not all columns are needed for everyone. Ignore unneeded columns.</p>
 
-<table>
-    <tr>
-        <td>Expected Runway</td>
-        <td></td>
-        <td>Runway Length</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Observation Time Local</td>
-        <td>0</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>T/O CG fwd/aft</td>
-        <td>0</td>
-        <td>LDG CG fwd/</td>
-        <td>0</td>
-    </tr>
-    <tr>
-        <td>Zero Fueld CG fwd/aft</td>
-        <td>0</td>
-        <td>Demo. Crosswind</td>
-        <td>0</td>
-    </tr>
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <td>Time to next MX</td>
+                <td>50hr</td>
+                <td>100hr</td>
+                <td>AD</td>
 
-</table>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Days to next MX</td>
+                <td>AD:</td>
+                <td>Annual:</td>
+                <td>Regist:</td>
+            </tr>
+        </table>
+    </div>
+</section>
 
-<h2>Maintenance Status</h2>
-<p>Not all columns are needed for everyone. Ignore unneeded columns.</p>
+<section>
+    <h2>6. Aircraft Reference Speeds SE/ME</h2>
+    <p>Some columns may remain empty for your aircraft profile.</p>
 
-<table>
-    <tr>
-        <td>Time to next MX</td>
-        <td>50hr</td>
-        <td>100hr</td>
-        <td>AD</td>
-
-        <td></td>
-    </tr>
-    <tr>
-        <td>Days to next MX</td>
-        <td>AD:</td>
-        <td>Annual:</td>
-        <td>Regist:</td>
-    </tr>
-</table>
-
-<h2>Aircraft Reference Speeds SE/ME</h2>
-<p>Some columns may remain empty for your aircraft profile.</p>
-
-<table>
-    <tr>
-        <td>Time to next MX</td>
-        <td>50hr</td>
-        <td>100hr</td>
-        <td>AD</td>
-
-        <td></td>
-    </tr>
-    <tr>
-        <td>Days to next MX</td>
-        <td>AD:</td>
-        <td>Annual:</td>
-        <td>Regist:</td>
-    </tr>
-</table>
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <td>Vr</td>
+                <td>Vxse</td>
+                <td>Vle</td>
+                <td>Vg</td>
+            </tr>
+            <tr>
+                <td>50' Obst. Clearance</td>
+                <td>Vyse</td>
+                <td>Vlo</td>
+                <td>Vmc</td>
+            </tr>
+            <tr>
+                <td>Vx</td>
+                <td>Vs0</td>
+                <td>Va Max</td>
+                <td>Vapp Short</td>
+            </tr>
+            <tr>
+                <td>Vy</td>
+                <td>Vs1</td>
+                <td>Vno</td>
+                <td>Vapp Normal</td>
+            </tr>
+            <tr>
+                <td>Vcc</td>
+                <td>Vfe</td>
+                <td>Vne</td>
+                <td>Vapp Flapless</td>
+            </tr>
+        </table>
+    </div>
+</section>
 
 Have a safe flight!
 
@@ -236,7 +291,7 @@ Have a safe flight!
 <footer>
     <p>Developed by David Stevens</p>
     <p>License: GPLv3</p>
-    <p>GitHub Repository: </p>
+    <p>GitHub Repository: https://github.com/mu-arch/balancedbird</p>
 </footer>
 
 
