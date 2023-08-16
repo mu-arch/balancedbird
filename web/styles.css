@@ -54,16 +54,23 @@ body {
 
 header {
     padding: 30px 0;
+    border-bottom: 1px solid #d7d7d7;
 }
 
 header p {
     width: 650px;
-    line-height: 25px;
+    font-size: 20px;
+    line-height: 30px;
 }
 
 h1 {
-    font-size: 30px;
+    font-size: 60px;
     padding-bottom: 10px;
+    background-image: linear-gradient(180deg, #0028ff, #c4dcff);
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+    font-weight: bold
 }
 
 .table-wrapper {
@@ -150,7 +157,7 @@ section {
 }
 
 .wb td:first-child {
-    width: 200px;
+    width: 150px;
     padding: 10px;
 }
 
@@ -176,4 +183,8 @@ section {
 
 .wb tbody:nth-child(4) tr:last-child {
     background-color: var(--highlight);
+}
+
+.final-row {
+    font-weight: bold;
 }

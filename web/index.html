@@ -8,12 +8,117 @@
 <body>
 
 <header>
-    <h1>BalancedBird - Weight & Balance App</h1>
-    <p>This program will help you quickly complete weight and balance calculations. Choose a preset aircraft type below, or start from scratch. Always consult your aircraft's POH for accurate values.</p>
+    <h1>BalancedBird</h1>
+    <p>This program will help you quickly complete weight and balance calculations. Select aircraft type below, then complete the form using your aircraft's POH.</p>
+    <div id="clear">clear</div>
 </header>
 
 <section>
-    <h2>1. Limits</h2>
+    <h2>1. Aircraft Preset</h2>
+</section>
+
+<section>
+    <h2>2. Weight & Balance</h2>
+    <div class="table-wrapper wb">
+        <table>
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Weight(lbs)</th>
+                <th>Arm-CG (in)</th>
+                <th>Moment (lbs-in)</th>
+            </tr>
+            </thead>
+            <tbody class="wb1">
+            <tr>
+                <td>Empty Wt.</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input disabled type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Front Seats</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input disabled type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Middle Seats</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input disabled type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Rear Seats</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input disabled type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Baggage 1</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input disabled type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Baggage 2</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input disabled type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Zero Fuel Wt.</td>
+                <td><input disabled type="number" placeholder="0" class="final-row"></td>
+                <td><input disabled type="number" placeholder="0" class="final-row"></td>
+                <td><input disabled type="number" placeholder="0" class="final-row"></td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td>Fuel</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Ramp Wt.</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Start/Taxi Fuel</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>T/O Wt.</td>
+                <td><input disabled type="number" placeholder="0" class="final-row"></td>
+                <td><input disabled type="number" placeholder="0" class="final-row"></td>
+                <td><input disabled type="number" placeholder="0" class="final-row"></td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td>Est. Fuel Burn</td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+                <td><input type="number" placeholder="0"></td>
+            </tr>
+            <tr>
+                <td>Est. LDG Wt.</td>
+                <td><input disabled type="number" placeholder="0" class="final-row"></td>
+                <td><input disabled type="number" placeholder="0" class="final-row"></td>
+                <td><input disabled type="number" placeholder="0" class="final-row"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section>
+    <h2>3. Limits</h2>
 
     <div class="table-wrapper">
         <table>
@@ -40,107 +145,7 @@
 </section>
 
 <section>
-    <h2>2. Weight & Balance</h2>
-    <div class="table-wrapper wb">
-        <table>
-            <thead>
-            <tr>
-                <th>Type</th>
-                <th>Weight(lbs)</th>
-                <th>Arm-CG (in)</th>
-                <th>Moment (lbs-in)</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Empty Wt.</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Front Seats</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Middle Seats</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Rear Seats</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Baggage 1</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Baggage 2</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Zero Fuel Wt.</td>
-                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
-                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
-                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
-            </tr>
-            </tbody>
-            <tbody>
-            <tr>
-                <td>Fuel</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Ramp Wt.</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Start/Taxi Fuel</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>T/O Wt.</td>
-                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
-                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
-                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
-            </tr>
-            </tbody>
-            <tbody>
-            <tr>
-                <td>Est. Fuel Burn</td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-                <td><input type="number" placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Est. LDG Wt.</td>
-                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
-                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
-                <td><input disabled type="number" placeholder="0" class="simulate-disabled"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-
-<section>
-    <h2>3. Current Conditions</h2>
+    <h2>4. Current Conditions</h2>
 
     <h3>Input ICAO Airport Identifier</h3>
     <p>Weather information will be automatically acquired from the FAA.</p>
@@ -190,7 +195,7 @@
 </section>
 
 </section>
-<h2>4. Performance Profile</h2>
+<h2>5. Performance Profile</h2>
 
 <div class="table-wrapper">
     <table>
@@ -201,21 +206,15 @@
             <td></td>
         </tr>
         <tr>
-            <td>Observation Time Local</td>
+            <td>T/O GRND Roll</td>
             <td>0</td>
-            <td></td>
+            <td>LDG GRND Roll</td>
             <td></td>
         </tr>
         <tr>
-            <td>T/O CG fwd/aft</td>
+            <td>T/O Dist (50')</td>
             <td>0</td>
-            <td>LDG CG fwd/</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>Zero Fueld CG fwd/aft</td>
-            <td>0</td>
-            <td>Demo. Crosswind</td>
+            <td>LDG Dist (50')</td>
             <td>0</td>
         </tr>
 
@@ -224,7 +223,7 @@
 </section>
 
 <section>
-    <h2>5. Maintenance Status</h2>
+    <h2>6. Maintenance Status</h2>
     <p>Not all columns are needed. Ignore unneeded columns.</p>
 
     <div class="table-wrapper">
@@ -299,3 +298,5 @@ Have a safe flight!
 
 </body>
 </html>
+
+<script src="scripts.js"></script>
