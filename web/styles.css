@@ -190,6 +190,6 @@ section {
     background-color: var(--highlight);
 }
 
-.final-row {
+.wb tr:last-child input {
     font-weight: bold;
 }
