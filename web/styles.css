@@ -119,21 +119,26 @@ td input {
     font-size: 16px;
     background-color: transparent;
     margin:0;
-    width: 100%;
-    padding: 10px;
+    width: calc(100% - 10px);
+    padding: 10px 0 10px 10px;
+    font-family: monospace;
+}
+
+td input:not(:disabled):hover {
+    background-color: #ebf2ff;
 }
 
 td input:focus {
     text-decoration-color: #3058c5;
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-input[type="number"] {
+input {
     -moz-appearance: textfield;
 }
 
