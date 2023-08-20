@@ -90,12 +90,13 @@ function calc_wb_part_2() {
         weightInput.value = Math.round(Number(zeroFuelWt.value) + totalWeight);
         momentInput.value = Number(zeroFuelMoment.value) + totalMoment;
 
-        armInput.value = safeDivide(momentInput.value, weightInput.value)
+        armInput.value = safeDivide(momentInput.value, weightInput.value).toFixed(2);
     }
     {
         let [fuelWt, fuelArm, fuelMoment] = [...rows[0].cells].slice(1).map(cell => cell.querySelector("input"));
         let [taxiUseWtInput, taxiUseArmInput, taxiUseMomentInput] = [...rows[2].cells].slice(1).map(cell => cell.querySelector("input"));
         taxiUseArmInput.value =  fuelArm.value
+        taxiUseMomentInput.value = Number(taxiUseWtInput.value) * Number(taxiUseArmInput.value)
     }
     {
         let [rampWeightInput, RampArmInput, rampMomentInput] = [...rows[1].cells].slice(1).map(cell => cell.querySelector("input"));
