@@ -1,8 +1,12 @@
-document.getElementById("clear").addEventListener("click", function() {
-    document.querySelectorAll("input").forEach(function(input) {
-        input.value = "";
-    });
-});
+//GLOBALS
+
+let maxToWt = 0;
+let maxLdgWt = 0;
+
+function setWtLimits(to,ldg) {
+    maxToWt = to;
+    maxLdgWt = ldg;
+}
 
 function safeDivide(a, b) {
     if (b === 0) {
@@ -115,14 +119,22 @@ function calc_wb_part_2() {
 }
 
 
-function recomputeWB() {
+function recompute() {
+    setWtLimits(Number(document.getElementById("max_to_wt").value), Number(document.getElementById("max_ldg_wt").value))
+
     calc_wb_part_1()
     calc_wb_part_2()
 }
 
 // Bind the calculateValues function to the input change events
-document.querySelectorAll(".wb input").forEach(function(input) {
-    input.addEventListener("input", recomputeWB);
+document.querySelectorAll("input").forEach(function(input) {
+    input.addEventListener("input", recompute);
+});
+
+document.getElementById("clear").addEventListener("click", function() {
+    document.querySelectorAll("input").forEach(function(input) {
+        input.value = "";
+    });
 });
 
 

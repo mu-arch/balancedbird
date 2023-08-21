@@ -40,6 +40,7 @@ q:before, q:after {
 table {
     border-collapse: collapse;
     border-spacing: 0;
+    table-layout: fixed;
 }
 
 
@@ -93,13 +94,18 @@ thead {
 
 th {
     text-align: left;
-    padding: 12px 10px;
+    padding: 9px 15px;
+    color: rgba(0, 0, 0, 0.73);
     background: linear-gradient(to top, #f4f4f4, #fff);
     text-transform: uppercase;
     font-weight: bold;
     letter-spacing: 1px;
     font-size: 11px;
+    cursor: default;
+}
 
+th span {
+    color: rgba(0, 0, 255, 0.28);
 }
 
 tr:first-child {
@@ -113,7 +119,7 @@ tr {
 td input {
     border:none;
     text-decoration: underline;
-    text-decoration-color: #4c67b1;
+    text-decoration-color: #0059ff;
     text-decoration-thickness: 2px;
     outline: none;
     font-size: 16px;
@@ -129,7 +135,7 @@ td input:not(:disabled):hover {
 }
 
 td input:focus {
-    text-decoration-color: #3058c5;
+    text-decoration-color: #0039d9;
 }
 
 input::-webkit-inner-spin-button,
@@ -155,6 +161,7 @@ h2 {
 
 p {
     padding: 10px 0 20px 0;
+    line-height: 24px;
 }
 
 section {
@@ -163,7 +170,7 @@ section {
 
 .wb td:first-child {
     width: 150px;
-    padding: 10px;
+    padding: 8px 15px;
 }
 
 .wb tbody:nth-child(2) {
@@ -193,3 +200,12 @@ section {
 .wb tr:last-child input {
     font-weight: bold;
 }
+
+.std td:first-child,
+.std td:nth-child(3) {
+    font-weight: bold;
+    padding: 8px 15px;
+    width: 150px;
+}
+
+

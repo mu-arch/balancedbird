@@ -19,14 +19,37 @@
 
 <section>
     <h2>2. Weight & Balance</h2>
+    <p>Fill out each row as required. Fields not underlined in blue are computed for you.</p>
+
+    <div class="table-wrapper">
+        <table class="std">
+            <thead>
+            <tr>
+                <th>Category</th>
+                <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
+                <th>Category</th>
+                <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Max T/O Wt.</td>
+                <td><input id="max_to_wt" placeholder="0"></td>
+                <td>Max LDG Wt.</td>
+                <td><input id="max_ldg_wt" placeholder="0"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
     <div class="table-wrapper wb">
         <table class="wb">
             <thead>
             <tr>
-                <th></th>
-                <th>Weight(lbs)</th>
-                <th>Arm-CG (in)</th>
-                <th>Moment (lbs-in)</th>
+                <th>Category</th>
+                <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
+                <th title="Inches from a designated reference point, or datum, to the center of gravity of the airplane. This reference point, or datum, can vary based on the aircraft design, and is often, but not necessarily the engine firewall.">Arm-CG (in)<span>?</span></th>
+                <th title="A moment, when referring to aircraft weight and balance calculations, is the product of a weight (in pounds) and its arm (in inches). The resulting value, 'lbs-in', represents the rotational tendency of that weight about a reference point or datum.">Moment (lbs-in)<span>?</span></th>
             </tr>
             </thead>
             <tbody class="wb1">
@@ -104,7 +127,7 @@
                 <td>Est. Fuel Burn</td>
                 <td><input  placeholder="0"></td>
                 <td><input  placeholder="0"></td>
-                <td><input  placeholder="0"></td>
+                <td><input disabled placeholder="0"></td>
             </tr>
             <tr>
                 <td>Est. LDG Wt.</td>
@@ -135,7 +158,7 @@
                 <td>0</td>
             </tr>
             <tr>
-                <td>Zero Fueld CG fwd/aft</td>
+                <td>Zero Fuel CG fwd/aft</td>
                 <td>0</td>
                 <td>Demo. Crosswind</td>
                 <td>0</td>
