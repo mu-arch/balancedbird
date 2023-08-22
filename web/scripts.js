@@ -10,9 +10,64 @@ function setWtLimits(to,ldg) {
 
 function safeDivide(a, b) {
     if (b === 0) {
-        return 0; // or return any value you prefer
+        return 0;
     }
     return a / b;
+}
+
+function parseStrict(value) {
+    const num = parseFloat(value);
+    return value === num.toString() ? num : NaN;
+}
+
+function calc_wb() {
+
+    let total_wt = 0;
+    let total_moment = 0;
+    let nan_detected = false;
+
+    const rows = document.querySelectorAll(".wbrows tr");
+
+    for (const row of rows) {
+
+        let [wtInput, armInput, momentInput] = [...row.cells]
+            .slice(1)
+            .map(cell => cell.querySelector("input"));
+
+        //reset
+        wtInput.closest('tr').style.backgroundColor = null;
+
+        const firstCellText = row.cells[0].textContent.trim();
+        if (firstCellText === "Zero Fuel Wt.") {
+            if (nan_detected) {
+                wtInput.value = "Invalid";
+                momentInput.value = "Invalid";
+                armInput.value = "Invalid"
+            } else {
+                wtInput.value = total_wt;
+                momentInput.value = total_moment;
+                armInput.value = safeDivide(total_moment, total_wt)
+            }
+            continue
+        }
+
+        let wt = wtInput.value.trim() !== "" ? parseStrict(wtInput.value) : null;
+        let arm = armInput.value.trim() !== "" ? parseStrict(armInput.value) : null;
+
+        if (isNaN(wt) || isNaN(arm)) {
+            nan_detected = true
+            wtInput.closest('tr').style.backgroundColor = 'red';
+        }
+
+
+
+        total_wt += wt;
+        total_moment = wt * arm;
+
+        momentInput.value = total_moment
+
+    }
+
 }
 
 
@@ -121,9 +176,7 @@ function calc_wb_part_2() {
 
 function recompute() {
     setWtLimits(Number(document.getElementById("max_to_wt").value), Number(document.getElementById("max_ldg_wt").value))
-
-    calc_wb_part_1()
-    calc_wb_part_2()
+    calc_wb()
 }
 
 // Bind the calculateValues function to the input change events
@@ -140,6 +193,7 @@ document.getElementById("clear").addEventListener("click", function() {
 
 
 // clear all inputs on page load
+/*
 document.querySelectorAll("input").forEach(function(input) {
     input.value = "";
-});
+});*/
