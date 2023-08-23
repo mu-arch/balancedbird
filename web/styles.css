@@ -83,6 +83,11 @@ h1 {
     margin: 20px 0;
 }
 
+.special-wrapper {
+    border: 1px solid #efefef;
+    border-radius: 10px;
+}
+
 table {
     width: 100%;
     border-spacing: 0;
@@ -94,14 +99,17 @@ thead {
 
 th {
     text-align: left;
-    padding: 9px 15px;
+    padding: 9px 10px;
     color: rgba(0, 0, 0, 0.73);
-    background: linear-gradient(to top, #f4f4f4, #fff);
     text-transform: uppercase;
     font-weight: bold;
     letter-spacing: 1px;
     font-size: 11px;
     cursor: default;
+}
+
+.table-wrapper th {
+    background: linear-gradient(to top, #f4f4f4, #fff);
 }
 
 th span {
@@ -114,6 +122,10 @@ tr:first-child {
 
 tr {
     border-top: 1px solid #d7d7d7;
+}
+
+td {
+    position: relative;
 }
 
 td input {
@@ -131,7 +143,7 @@ td input {
 }
 
 td input:not(:disabled):hover {
-    background-color: #ebf2ff;
+    font-weight:bold;
 }
 
 td input:focus {
@@ -153,6 +165,10 @@ input[disabled] {
     text-decoration: none;
 }
 
+input:hover {
+    background-color: #f7f8ff;
+}
+
 h2 {
     padding: 15px 0;
     font-size: 22px;
@@ -169,14 +185,9 @@ section {
 }
 
 .wb td:first-child {
-    width: 150px;
-    padding: 8px 15px;
+    padding: 8px 10px;
 }
 
-.wb tbody:nth-child(2) {
-
-    border-bottom: 20px solid #fff;
-}
 
 .wb td:first-child {
     font-weight: bold;
@@ -190,7 +201,6 @@ section {
 
 .wb tbody:nth-child(3) tr:last-child {
     background-color: var(--highlight);
-    border-bottom: 20px solid #fff;
 }
 
 .wb tbody:nth-child(4) tr:last-child {
@@ -208,4 +218,32 @@ section {
     width: 150px;
 }
 
+.field-error {
+    background-color: #ffbdbd;
+    color:red;
+}
 
+
+.field-error input:hover{
+    background-color: #ffacac!important;
+}
+
+.gal-view {
+    padding: 0 10px;
+    font-weight:bold;
+    white-space: nowrap;    /* Prevent wrapping */
+    width: auto;
+    cursor:default
+}
+
+.gal-view span span {
+    color: rgba(0, 0, 255, 0.38);
+    font-size: 11px;
+}
+
+.minus::before {
+    content: '-';
+    position: absolute;
+    top: 10px;
+    left: -5px;
+}

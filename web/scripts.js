@@ -15,12 +15,24 @@ function safeDivide(a, b) {
     return a / b;
 }
 
+function trimTrailingZeros(value) {
+    if (value.includes('.')) {
+        while (value.endsWith('0')) {
+            value = value.substring(0, value.length - 1);
+        }
+        if (value.endsWith('.')) {
+            value = value.substring(0, value.length - 1);
+        }
+    }
+    return value;
+}
+
 function parseStrict(value) {
     const num = parseFloat(value);
     return value === num.toString() ? num : NaN;
 }
 
-function calc_wb() {
+function calc_wb(lastInputElement) {
 
     let total_wt = 0;
     let total_moment = 0;
@@ -30,15 +42,20 @@ function calc_wb() {
 
     for (const row of rows) {
 
-        let [wtInput, armInput, momentInput] = [...row.cells]
-            .slice(1)
-            .map(cell => cell.querySelector("input"));
+        const firstCellText = row.cells[0].textContent.trim();
+
+        let [wtInput, armInput, momentInput] = [...row.cells].slice(1).map(cell => cell.querySelector("input"));
 
         //reset
-        wtInput.closest('tr').style.backgroundColor = null;
+        wtInput.closest("tr").classList = "";
 
-        const firstCellText = row.cells[0].textContent.trim();
-        if (firstCellText === "Zero Fuel Wt.") {
+        let wt = wtInput.value.trim() !== "" ? parseStrict(wtInput.value) : null;
+        let arm = armInput.value.trim() !== "" ? parseStrict(armInput.value) : null;
+
+
+        if (firstCellText === "Zero Fuel Wt."
+            || firstCellText === "Ramp Wt."
+            || firstCellText === "T/O Wt.") {
             if (nan_detected) {
                 wtInput.value = "Invalid";
                 momentInput.value = "Invalid";
@@ -46,142 +63,55 @@ function calc_wb() {
             } else {
                 wtInput.value = total_wt;
                 momentInput.value = total_moment;
-                armInput.value = safeDivide(total_moment, total_wt)
+                armInput.value = safeDivide(total_moment, total_wt).toFixed(3)
             }
             continue
         }
 
-        let wt = wtInput.value.trim() !== "" ? parseStrict(wtInput.value) : null;
-        let arm = armInput.value.trim() !== "" ? parseStrict(armInput.value) : null;
+        let galInput = row.querySelector(".gal-view input");
+
+        if (galInput) {
+            if (lastInputElement === wtInput) {
+                galInput.value = safeDivide(wt, 6.01).toFixed(3)
+            } else if (lastInputElement === galInput) {
+                wt = trimTrailingZeros((Number(galInput.value) * 6.01).toFixed(3));
+                wtInput.value = wt
+                //return calc_wb()
+            }
+        }
+
 
         if (isNaN(wt) || isNaN(arm)) {
             nan_detected = true
-            wtInput.closest('tr').style.backgroundColor = 'red';
+            wtInput.closest("tr").classList.add("field-error")
         }
 
 
+        if (firstCellText === "Start/Taxi Fuel") {
+            total_wt -= wt;
+            arm = Number(document.getElementById("fuelarm").value)
+            armInput.value = arm
+        } else {
+            total_wt += wt;
+        }
 
-        total_wt += wt;
-        total_moment = wt * arm;
-
-        momentInput.value = total_moment
+        total_moment += wt * arm;
+        momentInput.value = (wt * arm).toFixed(3)
 
     }
 
 }
 
-
-function calc_wb_part_1() {
-    document.querySelectorAll(".wb1 tr:last-child")[0].style.background = null;
-    let totalWeight = 0;
-    let totalMoment = 0;
-    const rows = document.querySelectorAll(".wb1 tr:not(:last-child)");
-    const zeroFuelWeightInputs = document.querySelectorAll(".wb1 tr:last-child input");
-    zeroFuelWeightInputs.forEach(input => input.value = "0");
-
-    for (const row of rows) {
-        let [weightInput, armInput, momentInput] = [...row.cells].slice(1).map(cell => cell.querySelector("input"));
-        let weightVal = weightInput.value;
-        let armVal = armInput.value;
-
-        if (weightVal === "") weightVal = "0";
-        if (armVal === "") armVal = "0";
-
-        const weight = Number(weightInput.value);
-        const arm = Number(armInput.value);
-
-        if (isNaN(weight) || isNaN(arm)) {
-            zeroFuelWeightInputs.forEach(input => input.value = "Invalid input");
-            document.querySelectorAll(".wb1 tr:last-child")[0].style.background = "#ffd3d3";
-            return; // Exit the function early if NaN is detected
-        }
-
-        const moment = weight * arm;
-        momentInput.value = moment % 1 === 0 ? moment : moment.toFixed(2);
-
-        totalWeight += weight;
-        totalMoment += moment;
-    }
-
-
-    zeroFuelWeightInputs[0].value = Math.round(totalWeight);
-    //weird parseFloat thing is used to fix formatting of 0.00 to just 0
-    zeroFuelWeightInputs[1].value = parseFloat(safeDivide(totalMoment, totalWeight).toFixed(2)).toString();
-    zeroFuelWeightInputs[2].value = parseFloat(totalMoment.toFixed(2)).toString();
-}
-
-function calc_wb_part_2() {
-    document.querySelectorAll(".wb2 tr:last-child")[0].style.background = null;
-    let totalWeight = 0;
-    let totalMoment = 0;
-    const rows = document.querySelectorAll(".wb2 tr");
-    const zeroFuelWeightInputs = document.querySelectorAll(".wb2 tr:last-child input");
-    zeroFuelWeightInputs.forEach(input => input.value = "0");
-
-    {
-        let row = rows[0];
-        let [weightInput, armInput, momentInput] = [...row.cells].slice(1).map(cell => cell.querySelector("input"));
-        let weightVal = weightInput.value;
-        let armVal = armInput.value;
-
-        if (weightVal === "") weightVal = "0";
-        if (armVal === "") armVal = "0";
-
-        const weight = Number(weightInput.value);
-        const arm = Number(armInput.value);
-
-        if (isNaN(weight) || isNaN(arm)) {
-            zeroFuelWeightInputs.forEach(input => input.value = "Invalid input");
-            document.querySelectorAll(".wb2 tr:last-child")[0].style.background = "#ffd3d3";
-            return; // Exit the function early if NaN is detected
-        }
-
-        const moment = weight * arm;
-        momentInput.value = moment % 1 === 0 ? moment : moment.toFixed(2);
-
-        totalWeight += weight;
-        totalMoment += moment;
-    }
-    {
-        let row = rows[1];
-        let [weightInput, armInput, momentInput] = [...row.cells].slice(1).map(cell => cell.querySelector("input"));
-        let [zeroFuelWt, zeroFuelArm, zeroFuelMoment] = document.querySelectorAll(".wb1 tr:last-child input");
-        weightInput.value = Math.round(Number(zeroFuelWt.value) + totalWeight);
-        momentInput.value = Number(zeroFuelMoment.value) + totalMoment;
-
-        armInput.value = safeDivide(momentInput.value, weightInput.value).toFixed(2);
-    }
-    {
-        let [fuelWt, fuelArm, fuelMoment] = [...rows[0].cells].slice(1).map(cell => cell.querySelector("input"));
-        let [taxiUseWtInput, taxiUseArmInput, taxiUseMomentInput] = [...rows[2].cells].slice(1).map(cell => cell.querySelector("input"));
-        taxiUseArmInput.value =  fuelArm.value
-        taxiUseMomentInput.value = Number(taxiUseWtInput.value) * Number(taxiUseArmInput.value)
-    }
-    {
-        let [rampWeightInput, RampArmInput, rampMomentInput] = [...rows[1].cells].slice(1).map(cell => cell.querySelector("input"));
-        let [taxiUseWtInput, taxiUseArmInput, taxiUseMomentInput] = [...rows[2].cells].slice(1).map(cell => cell.querySelector("input"));
-
-        let takeoffWt = Number(rampWeightInput.value) - Number(taxiUseWtInput.value);
-        let takeoffMoment = Number(rampMomentInput.value) - Number(taxiUseMomentInput.value);
-        let takeoffArm = safeDivide(takeoffMoment, takeoffWt)
-
-        zeroFuelWeightInputs[0].value = takeoffWt;
-        //weird parseFloat thing is used to fix formatting of 0.00 to just 0
-        zeroFuelWeightInputs[1].value = parseFloat(takeoffArm).toFixed(2).toString();
-        zeroFuelWeightInputs[2].value = parseFloat(takeoffMoment.toFixed(2)).toString();
-    }
-
-}
-
-
-function recompute() {
+function recompute(lastInput) {
     setWtLimits(Number(document.getElementById("max_to_wt").value), Number(document.getElementById("max_ldg_wt").value))
-    calc_wb()
+    calc_wb(lastInput)
 }
 
 // Bind the calculateValues function to the input change events
 document.querySelectorAll("input").forEach(function(input) {
-    input.addEventListener("input", recompute);
+    input.addEventListener("input", function(event) {
+        recompute(input); // passing the current input as an argument
+    });
 });
 
 document.getElementById("clear").addEventListener("click", function() {

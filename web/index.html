@@ -21,7 +21,7 @@
     <h2>2. Weight & Balance</h2>
     <p>Fill out each row as required. Fields not underlined in blue are computed for you.</p>
 
-    <div class="table-wrapper">
+    <div class="special-wrapper">
         <table class="std">
             <thead>
             <tr>
@@ -55,9 +55,9 @@
             <tbody class="wbrows">
             <tr>
                 <td>Empty Wt.</td>
-                <td><input  placeholder="0"></td>
-                <td><input  placeholder="0"></td>
-                <td><input disabled  placeholder="0"></td>
+                <td><input placeholder="0"></td>
+                <td><input placeholder="0"></td>
+                <td><input disabled placeholder="0"></td>
             </tr>
             <tr>
                 <td>Front Seats</td>
@@ -96,11 +96,29 @@
                 <td><input disabled placeholder="0"></td>
             </tr>
             </tbody>
-            <tbody class="wb2">
+        </table>
+    </div>
+    <div class="table-wrapper wb">
+        <table>
+            <colgroup>
+                <col>
+                <col style="min-width:200px;">
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>Category</th>
+                <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
+                <th title="Inches from a designated reference point, or datum, to the center of gravity of the airplane. This reference point, or datum, can vary based on the aircraft design, and is often, but not necessarily the engine firewall.">Arm-CG (in)<span>?</span></th>
+                <th title="A moment, when referring to aircraft weight and balance calculations, is the product of a weight (in pounds) and its arm (in inches). The resulting value, 'lbs-in', represents the rotational tendency of that weight about a reference point or datum.">Moment (lbs-in)<span>?</span></th>
+            </tr>
+            </thead>
+            <tbody class="wbrows">
             <tr>
                 <td>Fuel</td>
-                <td><input placeholder="0"></td>
-                <td><input placeholder="0"></td>
+                <td><input placeholder="0"><div class="gal-view"><span title="One gallon of 100LL Avgas weighs 6.01 lbs.">Gal<span>?</span> =</span><input placeholder="0"></div></td>
+                <td><input id="fuelarm" placeholder="0"></td>
                 <td><input disabled placeholder="0"></td>
             </tr>
             <tr>
@@ -111,9 +129,9 @@
             </tr>
             <tr>
                 <td>Start/Taxi Fuel</td>
-                <td><input  placeholder="0"></td>
+                <td class="minus"><input placeholder="0"><div class="gal-view"><span title="One gallon of 100LL Avgas weighs 6.01 lbs.">Gal<span>?</span> =</span><input placeholder="0"></div></td>
                 <td><input disabled placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
+                <td class="minus"><input disabled placeholder="0"></td>
             </tr>
             <tr>
                 <td>T/O Wt.</td>
@@ -122,11 +140,43 @@
                 <td><input disabled  placeholder="0"></td>
             </tr>
             </tbody>
+        </table>
+    </div>
+    <div class="special-wrapper">
+        <table class="std">
+            <thead>
+            <tr>
+                <th>Category</th>
+                <th>Gallons Per Hour</th>
+                <th>Category</th>
+                <th>Hours (ex: 1.5)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Fuel Burn Rate</td>
+                <td><input disabled placeholder="0"></td>
+                <td>Flight time (+25%)</td>
+                <td><input disabled placeholder="0"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="table-wrapper wb">
+        <table class="wb">
+            <thead>
+            <tr>
+                <th>Category</th>
+                <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
+                <th title="Inches from a designated reference point, or datum, to the center of gravity of the airplane. This reference point, or datum, can vary based on the aircraft design, and is often, but not necessarily the engine firewall.">Arm-CG (in)<span>?</span></th>
+                <th title="A moment, when referring to aircraft weight and balance calculations, is the product of a weight (in pounds) and its arm (in inches). The resulting value, 'lbs-in', represents the rotational tendency of that weight about a reference point or datum.">Moment (lbs-in)<span>?</span></th>
+            </tr>
+            </thead>
             <tbody>
             <tr>
                 <td>Est. Fuel Burn</td>
-                <td><input  placeholder="0"></td>
-                <td><input  placeholder="0"></td>
+                <td><input disabled placeholder="0"></td>
+                <td><input disabled placeholder="0"></td>
                 <td><input disabled placeholder="0"></td>
             </tr>
             <tr>
