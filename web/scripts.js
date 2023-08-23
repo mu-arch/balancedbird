@@ -98,7 +98,7 @@ function calc_wb(lastInputElement) {
         }
 
         total_moment += wt * arm;
-        momentInput.value = (wt * arm).toFixed(3)
+        momentInput.value = (wt * arm)
 
     }
 
