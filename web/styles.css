@@ -236,7 +236,7 @@ section {
     cursor:default
 }
 
-.gal-view span span {
+span span {
     color: rgba(0, 0, 255, 0.38);
     font-size: 11px;
 }

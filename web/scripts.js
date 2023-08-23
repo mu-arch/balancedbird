@@ -68,15 +68,17 @@ function calc_wb(lastInputElement) {
             continue
         }
 
+        //this is for handling the special case when gallon inputs are available
         let galInput = row.querySelector(".gal-view input");
-
         if (galInput) {
             if (lastInputElement === wtInput) {
                 galInput.value = safeDivide(wt, 6.01).toFixed(3)
             } else if (lastInputElement === galInput) {
-                wt = trimTrailingZeros((Number(galInput.value) * 6.01).toFixed(3));
-                wtInput.value = wt
-                //return calc_wb()
+                let gal = galInput.value.trim() !== "" ? parseStrict(galInput.value) : null;
+                wt = (gal * 6.01).toFixed(3);
+                wtInput.value = trimTrailingZeros(wt)
+                //we need recursion to restart the whole thing since we edited values out of order
+                return calc_wb(null)
             }
         }
 
@@ -86,7 +88,7 @@ function calc_wb(lastInputElement) {
             wtInput.closest("tr").classList.add("field-error")
         }
 
-
+        //special case to handle fields that subtract weight
         if (firstCellText === "Start/Taxi Fuel") {
             total_wt -= wt;
             arm = Number(document.getElementById("fuelarm").value)
