@@ -16,7 +16,7 @@ function safeDivide(a, b) {
 }
 
 function roundToTwo(num) {
-    return +(Math.round(num + "e+2")  + "e-2");
+    return +(Math.round(num + "e+2") + "e-2");
 }
 
 function w(element, value) {
@@ -69,6 +69,7 @@ function calc_wb(lastInputElement) {
     let total_wt = 0;
     let total_moment = 0;
     let fuel_arm = 0;
+    let fuel_gallons = 0;
 
     const rows = document.querySelectorAll(".wbrows tr");
 
@@ -106,6 +107,10 @@ function calc_wb(lastInputElement) {
             return calc_wb(null);
         }
 
+        let galInput = rows[7].querySelector(".gal-view input");
+        fuel_gallons = galInput.value.trim() !== "" ? parseStrict(galInput.value) : null;
+
+
         fuel_arm = arm;
 
         let moment = wt * arm;
@@ -129,6 +134,9 @@ function calc_wb(lastInputElement) {
             return calc_wb(null);
         }
 
+        let galInput = rows[9].querySelector(".gal-view input");
+        let fuel_used = galInput.value.trim() !== "" ? parseStrict(galInput.value) : null;
+
         let arm = fuel_arm;
 
         let moment = wt * arm;
@@ -136,6 +144,7 @@ function calc_wb(lastInputElement) {
         w(momentInput, moment)
         total_wt -= wt
         total_moment -= moment
+        fuel_gallons -= fuel_used
     }
 
     {
@@ -148,6 +157,9 @@ function calc_wb(lastInputElement) {
     {
         let gph = parseStrict(document.getElementById("burnrate").value);
         let hours = parseStrict(document.getElementById("time").value);
+
+        document.getElementById("used").value = (hours * gph);
+        document.getElementById("remain").value = fuel_gallons - (hours * gph)
 
         let [wtInput, armInput, momentInput, _5, _6] = collect_wb_row(rows[11]);
 
@@ -169,6 +181,7 @@ function calc_wb(lastInputElement) {
         w(momentInput, total_moment)
         w(armInput, safeDivide(total_moment, total_wt))
     }
+
 
     //final run through which checks again for NaN. this is needed since some rows are edited out of order
     for (const row of rows) {
