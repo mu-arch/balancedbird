@@ -3,7 +3,7 @@
 let maxToWt = 0;
 let maxLdgWt = 0;
 
-function setWtLimits(to,ldg) {
+function setWtLimits(to, ldg) {
     maxToWt = to;
     maxLdgWt = ldg;
 }
@@ -15,92 +15,166 @@ function safeDivide(a, b) {
     return a / b;
 }
 
-function trimTrailingZeros(value) {
-    if (value.includes('.')) {
-        while (value.endsWith('0')) {
-            value = value.substring(0, value.length - 1);
-        }
-        if (value.endsWith('.')) {
-            value = value.substring(0, value.length - 1);
-        }
-    }
-    return value;
+function roundToTwo(num) {
+    return +(Math.round(num + "e+2")  + "e-2");
+}
+
+function w(element, value) {
+    element.value = roundToTwo(Number(value))
 }
 
 function parseStrict(value) {
+    if (value.endsWith('.')) {
+        value = value.slice(0, -1);  // Remove the trailing period
+    }
     const num = parseFloat(value);
     return value === num.toString() ? num : NaN;
 }
+
+function collect_wb_row(row) {
+    let [wtInput, armInput, momentInput] = [...row.cells].slice(1).map(cell => cell.querySelector("input"));
+
+    wtInput.closest("tr").classList = "";
+
+    let wt = wtInput.value.trim() !== "" ? parseStrict(wtInput.value) : null;
+    let arm = armInput.value.trim() !== "" ? parseStrict(armInput.value) : null;
+
+    console.log(wt, arm)
+
+    if (isNaN(wt) || isNaN(arm)) {
+        wtInput.closest("tr").classList.add("field-error")
+    }
+
+    return [wtInput, armInput, momentInput, wt, arm]
+}
+
+function processGalInput(row, lastInputElement, wtInput, wt) {
+    let galInput = row.querySelector(".gal-view input");
+
+    if (lastInputElement === wtInput) {
+        w(galInput, safeDivide(wt, 6.01));
+        return false; // Continue execution in the outer function
+    } else if (lastInputElement === galInput) {
+        let gal = galInput.value.trim() !== "" ? parseStrict(galInput.value) : null;
+        wt = (gal * 6.01);
+        wtInput.value = wt;
+        return true; // Exit the outer function
+    }
+    return false; // Default behavior: continue execution in the outer function
+}
+
 
 function calc_wb(lastInputElement) {
 
     let total_wt = 0;
     let total_moment = 0;
-    let nan_detected = false;
+    let fuel_arm = 0;
 
     const rows = document.querySelectorAll(".wbrows tr");
 
     for (const row of rows) {
+        let [wtInput, armInput, momentInput, wt, arm] = collect_wb_row(row);
 
-        const firstCellText = row.cells[0].textContent.trim();
-
-        let [wtInput, armInput, momentInput] = [...row.cells].slice(1).map(cell => cell.querySelector("input"));
-
-        //reset
         wtInput.closest("tr").classList = "";
-
-        let wt = wtInput.value.trim() !== "" ? parseStrict(wtInput.value) : null;
-        let arm = armInput.value.trim() !== "" ? parseStrict(armInput.value) : null;
-
-
-        if (firstCellText === "Zero Fuel Wt."
-            || firstCellText === "Ramp Wt."
-            || firstCellText === "T/O Wt.") {
-            if (nan_detected) {
-                wtInput.value = "Invalid";
-                momentInput.value = "Invalid";
-                armInput.value = "Invalid"
-            } else {
-                wtInput.value = total_wt;
-                momentInput.value = total_moment;
-                armInput.value = safeDivide(total_moment, total_wt).toFixed(3)
-            }
-            continue
-        }
-
-        //this is for handling the special case when gallon inputs are available
-        let galInput = row.querySelector(".gal-view input");
-        if (galInput) {
-            if (lastInputElement === wtInput) {
-                galInput.value = safeDivide(wt, 6.01).toFixed(3)
-            } else if (lastInputElement === galInput) {
-                let gal = galInput.value.trim() !== "" ? parseStrict(galInput.value) : null;
-                wt = (gal * 6.01).toFixed(3);
-                wtInput.value = trimTrailingZeros(wt)
-                //we need recursion to restart the whole thing since we edited values out of order
-                return calc_wb(null)
-            }
-        }
-
-
-        if (isNaN(wt) || isNaN(arm)) {
-            nan_detected = true
-            wtInput.closest("tr").classList.add("field-error")
-        }
-
-        //special case to handle fields that subtract weight
-        if (firstCellText === "Start/Taxi Fuel") {
-            total_wt -= wt;
-            arm = Number(document.getElementById("fuelarm").value)
-            armInput.value = arm
-        } else {
-            total_wt += wt;
-        }
-
-        total_moment += wt * arm;
-        momentInput.value = (wt * arm)
-
     }
+
+    for (const row of rows) {
+        let firstTd = row.querySelector('td').textContent;
+        if (firstTd === "Zero Fuel Wt.") {
+            break
+        }
+        let [wtInput, armInput, momentInput, wt, arm] = collect_wb_row(row);
+
+        total_wt += wt;
+        total_moment += wt * arm;
+        w(momentInput, (wt * arm))
+    }
+
+    //zero fuel weight row
+    {
+        let [wtInput, armInput, momentInput, wt, arm] = collect_wb_row(rows[6]);
+        w(wtInput, total_wt)
+        w(momentInput, total_moment)
+        w(armInput, safeDivide(total_moment, total_wt))
+    }
+
+    //fuel
+    {
+        let [wtInput, armInput, momentInput, wt, arm] = collect_wb_row(rows[7]);
+
+        if (processGalInput(rows[7], lastInputElement, wtInput, wt)) {
+            return calc_wb(null);
+        }
+
+        fuel_arm = arm;
+
+        let moment = wt * arm;
+        w(momentInput, moment)
+        total_wt += wt
+        total_moment += moment
+    }
+
+    //ramp wt
+    {
+        let [wtInput, armInput, momentInput, wt, arm] = collect_wb_row(rows[8]);
+        w(wtInput, total_wt)
+        w(momentInput, total_moment)
+        w(armInput, safeDivide(total_moment, total_wt))
+    }
+
+    {
+        let [wtInput, armInput, momentInput, wt, _] = collect_wb_row(rows[9]);
+
+        if (processGalInput(rows[9], lastInputElement, wtInput, wt)) {
+            return calc_wb(null);
+        }
+
+        let arm = fuel_arm;
+
+        let moment = wt * arm;
+        w(armInput, arm)
+        w(momentInput, moment)
+        total_wt -= wt
+        total_moment -= moment
+    }
+
+    {
+        let [wtInput, armInput, momentInput, wt, arm] = collect_wb_row(rows[10]);
+        w(wtInput, total_wt)
+        w(momentInput, total_moment)
+        w(armInput, safeDivide(total_moment, total_wt))
+    }
+
+    {
+        let gph = parseStrict(document.getElementById("burnrate").value);
+        let hours = parseStrict(document.getElementById("time").value);
+
+        let [wtInput, armInput, momentInput, _5, _6] = collect_wb_row(rows[11]);
+
+        let arm = fuel_arm;
+
+        let burnwt = (hours * gph) * 6.01
+        let moment = (burnwt * arm);
+        w(wtInput, burnwt)
+        w(momentInput, moment)
+        w(armInput, arm)
+
+        total_wt -= burnwt
+        total_moment -= moment
+    }
+
+    {
+        let [wtInput, armInput, momentInput, wt, arm] = collect_wb_row(rows[12]);
+        w(wtInput, total_wt)
+        w(momentInput, total_moment)
+        w(armInput, safeDivide(total_moment, total_wt))
+    }
+
+    //final run through which checks again for NaN. this is needed since some rows are edited out of order
+    for (const row of rows) {
+        let [wtInput, armInput, momentInput, wt, arm] = collect_wb_row(row);
+    }
+
 
 }
 
@@ -110,18 +184,17 @@ function recompute(lastInput) {
 }
 
 // Bind the calculateValues function to the input change events
-document.querySelectorAll("input").forEach(function(input) {
-    input.addEventListener("input", function(event) {
+document.querySelectorAll("input").forEach(function (input) {
+    input.addEventListener("input", function (event) {
         recompute(input); // passing the current input as an argument
     });
 });
 
-document.getElementById("clear").addEventListener("click", function() {
-    document.querySelectorAll("input").forEach(function(input) {
+document.getElementById("clear").addEventListener("click", function () {
+    document.querySelectorAll("input").forEach(function (input) {
         input.value = "";
     });
 });
-
 
 
 // clear all inputs on page load
@@ -129,3 +202,23 @@ document.getElementById("clear").addEventListener("click", function() {
 document.querySelectorAll("input").forEach(function(input) {
     input.value = "";
 });*/
+
+// Get all input fields in the document
+const inputFields = document.querySelectorAll('input');
+
+// Function to strip '-' and ',' from the input value
+function stripCharacters(event) {
+    // Get the current value of the input field
+    let currentValue = event.target.value;
+
+    // Strip '-' and ',' from the value
+    let newValue = currentValue.replace(/[-,]/g, '');
+
+    // Set the new value back to the input field
+    event.target.value = newValue;
+}
+
+// Add the event listener to each input field
+inputFields.forEach(inputField => {
+    inputField.addEventListener('input', stripCharacters);
+});
