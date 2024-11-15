@@ -66,6 +66,48 @@ header p {
     line-height: 30px;
 }
 
+.author {
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+header .author img{
+    width: 45px;
+    height: 45px;
+    border-radius: 200px;
+    display: inline-block;
+}
+
+.author div {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 0 0 13px 0;
+    color: rgba(0,0,0,.5);
+}
+
+.author span {
+    display: inline-block;
+    position: absolute;
+}
+
+.author .name {
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin: 4px 15px;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.author .contact-btn {
+    padding: 27px 19px;
+    font-weight: 500;
+    font-size: 12px;
+    color: #656565;
+}
+
 h1 {
     font-size: 60px;
     padding-bottom: 10px;
@@ -73,7 +115,53 @@ h1 {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-transform: uppercase;
-    font-weight: bold
+    font-weight: 900;
+    letter-spacing: -3px;
+}
+
+.preset_box {
+    height: 120px;
+    min-width: 170px;
+    display: inline-block;
+    border: 2px solid #c4c4c4;
+    border-radius: 5px;
+    margin: 10px 10px 0 0;
+    box-shadow: 0 2px 10px rgba(172, 172, 172, 0.27);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.preset_box.active {
+    border: 2px solid #27ae27;
+    box-shadow: 0 5px 15px rgba(49, 202, 0, 0.4);
+    color: #007a00;
+}
+
+.preset_box:hover {
+    border: 2px solid blue;
+    box-shadow: 0 5px 15px rgba(39, 147, 255, 0.4);
+    color: blue;
+}
+
+
+.preset_box img {
+    max-width: 140px;
+    max-height:90px;
+    position: absolute;
+    margin: 10px 0 0 20px;
+    z-index: -1;
+}
+
+.preset_box div {
+    text-align: center;
+    margin-top: 85px;
+}
+
+.section-header {
+    margin: 0 0 20px 0 ;
 }
 
 .table-wrapper {
@@ -172,7 +260,7 @@ input:hover {
 }
 
 h2 {
-    padding: 15px 0;
+    padding: 15px 0 0 0;
     font-size: 22px;
     font-weight: bold;
 }
@@ -180,6 +268,7 @@ h2 {
 p {
     padding: 10px 0 20px 0;
     line-height: 24px;
+    font-size: 14px;
 }
 
 section {

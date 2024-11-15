@@ -8,18 +8,31 @@
 <body>
 
 <header>
-    <h1>BalancedBird</h1>
-    <p>The easy-to-use aircraft weight and balance calculator.<br><br>Developed by David Stevens, a CFII at US Aviation Academy. Contact me to request improvements or give feedback here.</p>
+    <h1>Balanced Bird</h1>
+    <p>The easy-to-use aircraft weight and balance calculator.</p>
+    <div class="author">
+        <div>Developed by</div>
+        <img src="../img/david.png">
+        <span class="name">David Stevens, CFII</span>
+        <span class="contact-btn">Click to contact - Feedback welcome!</span>
+    </div>
 </header>
 
 <section>
     <h2>1. Aircraft Preset</h2>
-    <div id="clear">clear</div>
+    <p>Presets are quick templates for common models. Always confirm values with your POH.</p>
+    <div class="preset_box active"><img style="margin-left: 33px;" src="../img/aircraft_graphics/eagle.jpg"><div>No Preset</div></div>
+    <div class="preset_box"><img src="../img/aircraft_graphics/C152_graphic.PNG"><div>Cessna 152</div></div>
+    <div class="preset_box"><img style="margin-top: 20px;" src="../img/aircraft_graphics/C172R_graphic.PNG"><div>Cessna 172</div></div>
+
+
 </section>
 
 <section>
-    <h2>2. Weight & Balance</h2>
-    <p>Fill out each row as required. Fields not underlined in blue are computed for you.</p>
+    <div class="section-header">
+        <h2>2. Weight & Balance</h2>
+        <p>Fill out each row as required. Fields without blue underlining are computed for you.</p>
+    </div>
 
     <div class="special-wrapper">
         <table class="std">
@@ -386,7 +399,7 @@
     <p>GitHub Repository: https://github.com/mu-arch/balancedbird</p>
 </footer>
 
-
+<div id="clear">clear</div>
 </body>
 </html>
 
