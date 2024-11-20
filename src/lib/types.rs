@@ -1,32 +1,32 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct MetarDataRaw {
-    metar_id: i64,
-    icao_id: String,
-    receipt_time: String,
-    temp: f64,
-    dewp: f64,
-    wdir: String,
-    wspd: i64,
-    altim: f64,
-    slp: f64,
-    raw_ob: String,
-    name: String,
+    pub metar_id: i64,
+    pub temp: f64,
+    pub dewp: f64,
+    pub wdir: i64,
+    pub wspd: i32,
+    pub altim: f64,
+    #[serde(rename = "rawOb")]
+    pub raw_ob: String,
+    pub name: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct MetarDataReturned {
-    metar_id: i64,
-    icao_id: String,
-    receipt_time: String,
-    temp: f64,
-    dewp: f64,
-    wdir: String,
-    wspd: i64,
-    altimeter: i32,
-    slp: f64,
-    raw_ob: String,
-    name: String,
+    pub(crate) metar_id: i64,
+    pub(crate) temp: f64,
+    pub(crate) dewp: f64,
+    pub(crate) wdir: i64,
+    pub(crate) wspd: i32,
+    pub(crate) xwind: f64,
+    pub(crate) hwind: f64,
+    pub(crate) density_altitude: f64,
+    pub(crate) altimeter: f64,
+    pub(crate) raw_ob: String,
+    pub(crate) name: String,
+    pub(crate) best_runway: String,
+    pub(crate) field_elevation: f64,
+    pub(crate) diagram_link: Option<String>,
 }
