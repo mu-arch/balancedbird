@@ -279,13 +279,18 @@
     <input onkeydown="checkEnter(event)" id="weather-input" placeholder="Ex. KDTO">
     <button type="button" onclick="submitAirportId()">Load Airport Information</button>
 
-    <div class="lds-hourglass"></div>
     <p style="display:none;" id="weather-text"></p>
 
 
     <div id="weather-table" style="display: none">
         <div class="table-wrapper">
             <table class="std">
+                <tr>
+                    <td>Airport</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
                 <tr>
                     <td>Observation</td>
                     <td></td>
