@@ -1,30 +1,27 @@
 use std::cmp::Ordering;
-use std::error::Error;
 use axum::extract::Path;
-use axum::http::{Response, StatusCode};
+use axum::http::{StatusCode};
 use axum::Json;
-use axum::response::IntoResponse;
 use reqwest::{Client, Error as ReqwestError};
 use serde_json::{from_str, json};
 use crate::types::{MetarDataRaw, MetarDataReturned};
+use chrono::{Datelike, NaiveDate, TimeZone, Utc, Local};
+use scraper::{ElementRef, Html, Selector};
 
 // Handler function for the /weather/:code route
 pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Json<MetarDataReturned>), (StatusCode, &'static str)> {
     // Fetch airport data
     let airnav_page_data = fetch_html(format!("https://www.airnav.com/airport/{}", &code))
         .await
-        .ok_or_else(|| (StatusCode::BAD_GATEWAY, "Network error"))?;
+        .ok_or((StatusCode::BAD_GATEWAY, "Network error"))?;
 
     // Extract airport information
     let extracted_airport_data = extract_airport_info(&airnav_page_data)
-        .ok_or_else(|| (StatusCode::NOT_FOUND, "Airport not found"))?;
-
-    // Debugging (consider using proper logging in production)
-    dbg!(&extracted_airport_data);
-
+        .ok_or((StatusCode::NOT_FOUND, "Airport not found"))?;
+    
     // Fetch METAR data
     let metar = fetch_metar_data(&code).await
-        .ok_or_else(|| (StatusCode::BAD_GATEWAY, "Failed to fetch METAR data"))?;
+        .ok_or((StatusCode::BAD_GATEWAY, "Failed to fetch METAR data"))?;
 
     // Perform calculations
     let altimeter_inhg = hpa_to_inhg(metar.altim);
@@ -35,18 +32,38 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
     );
 
     // Determine the best runway based on crosswind
-    let (best_runway, min_crosswind, best_headwind) = extracted_airport_data.runways.iter()
+    let best_runway_info = extracted_airport_data.runways.iter()
         .map(|runway| {
-            let crosswind = calculate_crosswind(metar.wdir as f64, metar.wspd as f64, runway.heading_magnetic);
-            let headwind = calculate_headwind(metar.wdir as f64, metar.wspd as f64, runway.heading_magnetic);
-            (runway.number.clone(), crosswind, headwind)
+            let headwind = calculate_headwind(
+                metar.wdir as f64,
+                metar.wspd as f64,
+                runway.heading_magnetic,
+            );
+            let crosswind = calculate_crosswind(
+                metar.wdir as f64,
+                metar.wspd as f64,
+                runway.heading_magnetic,
+            );
+            (runway, headwind, crosswind)
         })
-        .min_by(|a, b| {
-            a.1.abs()
-                .partial_cmp(&b.1.abs())
-                .unwrap_or(Ordering::Equal)
+        .max_by(|a, b| {
+            // First, compare headwinds
+            match a.1.partial_cmp(&b.1) {
+                Some(Ordering::Greater) => Ordering::Greater,
+                Some(Ordering::Less) => Ordering::Less,
+                Some(Ordering::Equal) => {
+                    // If headwinds are equal, compare runway lengths
+                    let a_length = a.0.length_ft;
+                    let b_length = b.0.length_ft;
+                    a_length.cmp(&b_length)
+                },
+                None => Ordering::Equal,
+            }
         })
-        .unwrap_or(("Unknown".to_string(), 0.0, 0.0));
+        .ok_or((StatusCode::NOT_FOUND, "No runways available"))?;
+
+    let (best_runway, best_headwind, corresponding_crosswind) = best_runway_info;
+
 
     // Prepare the response data
     let metar_data_returned = MetarDataReturned {
@@ -58,10 +75,11 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
         altimeter: altimeter_inhg,
         raw_ob: metar.raw_ob,
         name: metar.name,
-        xwind: min_crosswind,
+        xwind: corresponding_crosswind,
         hwind: best_headwind,
         density_altitude,
-        best_runway,
+        best_runway: best_runway.number.clone(),
+        runway_length: best_runway.length_ft,
         field_elevation: extracted_airport_data.field_elevation,
         diagram_link: extracted_airport_data.airport_diagram_link,
     };
@@ -103,10 +121,6 @@ async fn fetch_html(url: String) -> Option<String> {
         .ok()
 }
 
-
-// Import necessary crates
-use chrono::{Datelike, NaiveDate, TimeZone, Utc, Local};
-use scraper::{ElementRef, Html, Selector};
 
 // Function to calculate crosswind component
 fn calculate_crosswind(wind_dir: f64, wind_speed: f64, runway_heading: f64) -> f64 {
@@ -180,8 +194,9 @@ fn zulu_to_local_readable_time(zulu: &str) -> String {
 
 #[derive(Debug)]
 struct Runway {
-    number: String,           // e.g., "16R"
-    heading_magnetic: f64,    // e.g., 166.0
+    number: String,           // e.g., "18L"
+    heading_magnetic: f64,    // e.g., 177.0
+    length_ft: i32,           // e.g., 7002
 }
 #[derive(Debug)]
 struct AirportInfo {
@@ -189,6 +204,7 @@ struct AirportInfo {
     runways: Vec<Runway>,
     airport_diagram_link: Option<String>,
 }
+
 
 
 fn extract_airport_info(html_content: &str) -> Option<AirportInfo> {
@@ -256,12 +272,21 @@ fn extract_airport_info(html_content: &str) -> Option<AirportInfo> {
                 } else if tag_name == "h4" {
                     let runway_header = element.text().collect::<Vec<_>>().join("").trim().to_string();
                     if runway_header.starts_with("Runway ") {
-                        let runway_numbers = runway_header
-                            .strip_prefix("Runway ")
-                            .unwrap_or(&runway_header);
+                        let runway_numbers_str = runway_header.strip_prefix("Runway ").unwrap_or(&runway_header);
+                        let runway_numbers: Vec<&str> = runway_numbers_str.split('/').collect();
 
-                        // Initialize headings to default values
-                        let mut heading_magnetic = None;
+                        // Ensure we have two runway numbers
+                        if runway_numbers.len() != 2 {
+                            continue; // Skip if not a pair of runways
+                        }
+
+                        let runway_number_1 = runway_numbers[0].trim().to_string();
+                        let runway_number_2 = runway_numbers[1].trim().to_string();
+
+                        // Initialize variables for headings and length
+                        let mut heading_magnetic_1 = None;
+                        let mut heading_magnetic_2 = None;
+                        let mut length_ft = None;
 
                         // Now, extract the data within the table
                         if let Some(table_element) = element.next_siblings()
@@ -271,40 +296,61 @@ fn extract_airport_info(html_content: &str) -> Option<AirportInfo> {
                             let tr_selector = Selector::parse("tr").ok()?;
                             for tr in table_element.select(&tr_selector) {
                                 let tds: Vec<_> = tr.select(&Selector::parse("td").ok()?).collect();
-                                if tds.len() >= 4 {
-                                    let label = tds[0].text().collect::<Vec<_>>().join("").trim().to_string();
-                                    if label.contains("Runway heading:") {
-                                        // Extract headings for both runways
-                                        let heading1 = tds[1].text().collect::<Vec<_>>().join("").trim().to_string();
-                                        let heading2 = tds[3].text().collect::<Vec<_>>().join("").trim().to_string();
+                                if tds.is_empty() {
+                                    continue;
+                                }
 
-                                        // Parse magnetic headings
-                                        if let Some(heading) = heading1.split("magnetic").next() {
-                                            heading_magnetic = heading.trim().parse::<f64>().ok();
-                                        }
+                                let label = tds[0].text().collect::<Vec<_>>().join("").trim().to_string();
 
-                                        // Create Runway structs
-                                        let runway_numbers: Vec<&str> = runway_numbers.split('/').collect();
-                                        if runway_numbers.len() >= 2 {
-                                            if let Some(heading) = heading_magnetic {
-                                                runways.push(Runway {
-                                                    number: runway_numbers[0].trim().to_string(),
-                                                    heading_magnetic: heading,
-                                                });
-                                            }
-                                            if let Some(heading) = heading2.split("magnetic").next()
-                                                .and_then(|h| h.trim().parse::<f64>().ok())
-                                            {
-                                                runways.push(Runway {
-                                                    number: runway_numbers[1].trim().to_string(),
-                                                    heading_magnetic: heading,
-                                                });
+                                if label.contains("Runway heading:") {
+                                    // Expecting tds[1] and tds[3] for each runway direction
+                                    if tds.len() >= 2 {
+                                        // Runway 1 heading
+                                        let heading_str = tds[1].text().collect::<Vec<_>>().join("").trim().to_string();
+                                        // Extract the magnetic heading
+                                        if let Some(mag_part) = heading_str.split("magnetic").next() {
+                                            if let Ok(heading) = mag_part.trim().parse::<f64>() {
+                                                heading_magnetic_1 = Some(heading);
                                             }
                                         }
-                                        break;
+                                    }
+                                    if tds.len() >= 4 {
+                                        // Runway 2 heading
+                                        let heading_str = tds[3].text().collect::<Vec<_>>().join("").trim().to_string();
+                                        if let Some(mag_part) = heading_str.split("magnetic").next() {
+                                            if let Ok(heading) = mag_part.trim().parse::<f64>() {
+                                                heading_magnetic_2 = Some(heading);
+                                            }
+                                        }
+                                    }
+                                } else if label.contains("Dimensions:") {
+                                    // Dimensions are the same for both runways
+                                    if tds.len() >= 2 {
+                                        let dimensions_str = tds[1].text().collect::<Vec<_>>().join("").trim().to_string();
+                                        if let Some(length_part) = dimensions_str.split("x").next() {
+                                            let length_str = length_part.trim();
+                                            if let Ok(length) = length_str.parse::<i32>() {
+                                                length_ft = Some(length);
+                                            }
+                                        }
                                     }
                                 }
+                                // You can handle other labels here if needed
                             }
+                        }
+
+                        // Now, create Runway structs if headings and length are available
+                        if let (Some(heading1), Some(heading2), Some(length)) = (heading_magnetic_1, heading_magnetic_2, length_ft) {
+                            runways.push(Runway {
+                                number: runway_number_1,
+                                heading_magnetic: heading1,
+                                length_ft: length,
+                            });
+                            runways.push(Runway {
+                                number: runway_number_2,
+                                heading_magnetic: heading2,
+                                length_ft: length,
+                            });
                         }
                     }
                 }

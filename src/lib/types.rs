@@ -29,4 +29,5 @@ pub struct MetarDataReturned {
     pub(crate) best_runway: String,
     pub(crate) field_elevation: f64,
     pub(crate) diagram_link: Option<String>,
+    pub(crate) runway_length: i32,
 }
