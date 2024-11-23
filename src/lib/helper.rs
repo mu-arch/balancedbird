@@ -5,10 +5,11 @@ use axum::http::{StatusCode};
 use axum::Json;
 use reqwest::{Client, Error as ReqwestError};
 use serde_json::{from_str, json};
-use crate::types::{MetarDataRaw, MetarDataReturned};
+use crate::types::{AirportInfo, MetarDataRaw, MetarDataReturned, Runway, WindDirection};
 use chrono::{Datelike, NaiveDate, TimeZone, Utc, Local};
 use scraper::{ElementRef, Html, Selector};
 use tracing::error;
+use crate::types;
 
 // Handler function for the /weather/:code route
 pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Json<MetarDataReturned>), (StatusCode, &'static str)> {
@@ -35,31 +36,40 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
     );
 
     // Determine the best runway based on crosswind
-    let best_runway_info = extracted_airport_data.runways.iter()
-        .map(|runway| {
-            let (crosswind, headwind) = calculate_wind_components(metar.wspd as f64, metar.wdir as i32, runway.heading_magnetic as i32);
-            (runway, headwind, crosswind)
-        })
-        .max_by(|a, b| {
-            // First, compare headwinds
-            match a.1.partial_cmp(&b.1) {
-                Some(Ordering::Greater) => Ordering::Greater,
-                Some(Ordering::Less) => Ordering::Less,
-                Some(Ordering::Equal) => {
-                    // If headwinds are equal, compare runway lengths
-                    let a_length = a.0.length_ft;
-                    let b_length = b.0.length_ft;
-                    a_length.cmp(&b_length)
-                },
-                None => Ordering::Equal,
-            }
-        })
-        .ok_or((StatusCode::NOT_FOUND, "No runways available"))?;
+    
+    let best_runway_info = match metar.wdir {
+        WindDirection::Degree(v) => {
+            let best_runway_info = extracted_airport_data.runways.iter()
+                .map(|runway| {
+                    let (crosswind, headwind) = calculate_wind_components(metar.wspd as f64, v, runway.heading_magnetic as i32);
+                    (runway, headwind, crosswind)
+                })
+                .max_by(|a, b| {
+                    // First, compare headwinds
+                    match a.1.partial_cmp(&b.1) {
+                        Some(Ordering::Greater) => Ordering::Greater,
+                        Some(Ordering::Less) => Ordering::Less,
+                        Some(Ordering::Equal) => {
+                            // If headwinds are equal, compare runway lengths
+                            let a_length = a.0.length_ft;
+                            let b_length = b.0.length_ft;
+                            a_length.cmp(&b_length)
+                        },
+                        None => Ordering::Equal,
+                    }
+                })
+                .ok_or((StatusCode::NOT_FOUND, "No runways available"))?;
+            
+            best_runway_info
+        }
+        WindDirection::Variable(_) => (&types::Runway { number: "Indeterminate".to_string(), heading_magnetic: 0f64, length_ft: 0i32 }, 0f64, 0f64)
+    };
 
     let (best_runway, best_headwind, corresponding_crosswind) = best_runway_info;
 
 
     // Prepare the response data
+    // if the wind dir was VRB ignore basically all the values in the response because they will be zero or wrong because they do not apply at all since we cannot compute anything when with is VRB
     let metar_data_returned = MetarDataReturned {
         metar_id: metar.metar_id,
         temp: metar.temp,
@@ -225,21 +235,6 @@ fn zulu_to_local_readable_time(zulu: &str) -> String {
         "Invalid date".to_string()
     }
 }
-
-
-#[derive(Debug)]
-struct Runway {
-    number: String,           // e.g., "18L"
-    heading_magnetic: f64,    // e.g., 177.0
-    length_ft: i32,           // e.g., 7002
-}
-#[derive(Debug)]
-struct AirportInfo {
-    field_elevation: f64,
-    runways: Vec<Runway>,
-    airport_diagram_link: Option<String>,
-}
-
 
 
 fn extract_airport_info(html_content: &str) -> Option<AirportInfo> {

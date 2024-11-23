@@ -1,17 +1,12 @@
 use serde::{Deserialize, Serialize};
 
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum WindDirection {
-    Degree(i64),
+    Degree(i32),
     Variable(String),
 }
 
-#[derive(Debug, Deserialize)]
-pub enum WindSpeed {
-    Degree(i64),
-    Variable(String),
-}
 #[derive(Debug, Deserialize)]
 pub struct MetarDataRaw {
     pub metar_id: i64,
@@ -30,7 +25,7 @@ pub struct MetarDataReturned {
     pub(crate) metar_id: i64,
     pub(crate) temp: f64,
     pub(crate) dewp: f64,
-    pub(crate) wdir: i64,
+    pub(crate) wdir: WindDirection,
     pub(crate) wspd: i32,
     pub(crate) xwind: f64,
     pub(crate) hwind: f64,
@@ -43,4 +38,17 @@ pub struct MetarDataReturned {
     pub(crate) field_elevation: f64,
     pub(crate) diagram_link: Option<String>,
     pub(crate) runway_length: i32,
+}
+
+#[derive(Debug)]
+pub struct Runway {
+    pub(crate) number: String,           // e.g., "18L"
+    pub(crate) heading_magnetic: f64,    // e.g., 177.0
+    pub(crate) length_ft: i32,           // e.g., 7002
+}
+#[derive(Debug)]
+pub struct AirportInfo {
+    pub(crate) field_elevation: f64,
+    pub(crate) runways: Vec<Runway>,
+    pub(crate) airport_diagram_link: Option<String>,
 }
