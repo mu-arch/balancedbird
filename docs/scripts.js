@@ -261,6 +261,9 @@ function getRandomDelay() {
     return Math.floor(Math.random() * (2000 - 100 + 1)) + 500;
 }
 
+// scripts.js
+
+// Function to submit the airport ID and fetch weather data
 function submitAirportId() {
     const airportId = document.getElementById('weather-input').value.trim().toUpperCase();
     document.getElementById('weather-table').style.display = "none";
@@ -268,14 +271,14 @@ function submitAirportId() {
 
     document.getElementById('weather-text').innerHTML = loader + " Please wait. Contacting FAA systems...";
 
-    delay(800, function() {
-        document.getElementById('weather-text').innerHTML = loader + " Acquiring NOTAM list...";
+    delay(400, function() {
+        document.getElementById('weather-text').innerHTML = loader + " Waiting for FAA database response...";
 
         delay(300, function() {
-            document.getElementById('weather-text').innerHTML = loader + " Downloading latest weather observation from aviationweather.gov...";
+            document.getElementById('weather-text').innerHTML = loader + " Acquiring latest weather observation from aviationweather.gov...";
 
             delay(1000, function() {
-                // Make the HTTP request after delays
+
                 var http = new XMLHttpRequest();
                 var url = 'http://127.0.0.1:3000/weather/' + airportId;
                 http.open('GET', url, true);
@@ -286,6 +289,7 @@ function submitAirportId() {
                             var response = JSON.parse(http.responseText);
                             updateWeatherTable(response);
 
+                            document.getElementById('weather-text').style.display = "none";
                             document.getElementById('weather-table').style.display = "block";
                         } else {
                             let metar_error = "Something went wrong. The weather system may be down or the server is not responding.";
@@ -298,74 +302,67 @@ function submitAirportId() {
         });
     });
 
+    // Utility function to create delays
     function delay(duration, callback) {
         setTimeout(callback, duration);
     }
 }
 
-// Function to update the weather table with the response data
-function updateWeatherTable(data) {
-    // Assuming your response data is an array with one object
-    let tds = document.querySelectorAll('#weather-table td'), d = data[0];
-    document.getElementById('weather-text').innerHTML = d.rawOb;
+// New function to update the weather table with the JSON response
+function updateWeatherTable(response) {
+    // Select the weather table
+    var table = document.querySelector('#weather-table table.std');
+    var rows = table.rows;
 
-    let timeZ =d.rawOb.match(/\b\d{6}Z\b/)?.[0];
+    // Helper functions to parse visibility and weather from raw_ob
+    function parseVisibility(ob) {
+        var match = ob.match(/(\d+)?\s*SM/);
+        return match ? match[0] : 'N/A';
+    }
 
-    tds[1].textContent = d.name || 'N/A';
-    tds[5].textContent = zuluToLocalReadableTime(timeZ) +" Local" || 'N/A';
-    tds[7].textContent = calculateCrosswind(d.wdir, d.wspd, getRunwayHeading()) + ' kt' || 'N/A';
-    tds[9].textContent = `${d.wdir}° @ ${d.wspd} kt` || 'N/A';
-    tds[11].textContent = calculateHeadwind(d.wdir, d.wspd, getRunwayHeading()) + ' kt' || 'N/A';
-    tds[13].textContent = d.visib || 'N/A';
-    tds[15].textContent = d.elev + ' ft' || 'N/A';
-    tds[17].textContent = `${d.temp}°C / ${d.dewp}°C` || 'N/A';
-    tds[19].textContent = calculatePressureAltitude(d.altim, d.elev).toFixed(0) + ' ft' || 'N/A';
-    tds[21].textContent = hpaToInhg(d.altim).toFixed(2) + ' inHg' || 'N/A';
-    tds[23].textContent = calculateDensityAltitude(d.temp, d.elev, d.altim) + ' ft' || 'N/A';
+    function parseWeather(ob) {
+        var match = ob.match(/SM\s+(\w+)/);
+        return match ? match[1] : 'N/A';
+    }
+
+    // Row 1: Airport and Best Runway
+    rows[0].cells[1].innerHTML = response.name || 'N/A';
+    rows[0].cells[3].innerHTML = response.best_runway || 'N/A';
+
+    // Row 2: Observation and Crosswind
+    rows[1].cells[1].innerHTML = response.raw_ob || 'N/A';
+    rows[1].cells[3].innerHTML = response.xwind ? response.xwind.toFixed(1) + ' KT' : 'N/A';
+
+    // Row 3: Surface Wind and Headwind
+    var surfaceWind = (response.wdir && response.wspd) ? `${response.wdir}° ${response.wspd} KT` : 'N/A';
+    rows[2].cells[1].innerHTML = surfaceWind;
+    rows[2].cells[3].innerHTML = response.hwind ? response.hwind.toFixed(1) + ' KT' : 'N/A';
+
+    // Row 4: Vis / Weather and Field Elevation
+    var visibility = parseVisibility(response.raw_ob);
+    var weather = parseWeather(response.raw_ob);
+    rows[3].cells[1].innerHTML = `${visibility} / ${weather}`;
+    rows[3].cells[3].innerHTML = response.field_elevation ? `${response.field_elevation} ft` : 'N/A';
+
+    // Row 5: Temp / Dew Pt. and Pressure Altitude
+    rows[4].cells[1].innerHTML = (response.temp !== undefined && response.dewp !== undefined) ? `${response.temp}° / ${response.dewp}°` : 'N/A';
+    // Pressure Altitude is not provided in the JSON; setting as 'N/A'
+    rows[4].cells[3].innerHTML = 'N/A';
+
+    // Row 6: Altimeter and Density Altitude
+    rows[5].cells[1].innerHTML = response.altimeter ? `${response.altimeter} in` : 'N/A';
+    rows[5].cells[3].innerHTML = response.density_altitude ? `${response.density_altitude} ft` : 'N/A';
 }
 
-// Helper function to get the runway heading (replace with actual data if available)
-function getRunwayHeading() {
-    // For simplicity, assume runway heading is 360 degrees
-    return 360;
-}
+// Event listener for the "Load Airport Information" button
+document.querySelector('button[onclick="submitAirportId()"]').addEventListener('click', submitAirportId);
 
-// Function to calculate crosswind component
-function calculateCrosswind(windDir, windSpeed, runwayHeading) {
-    let angle = Math.abs(windDir - runwayHeading);
-    if (angle > 180) angle = 360 - angle;
-    let crosswind = Math.sin(angle * (Math.PI / 180)) * windSpeed;
-    return crosswind.toFixed(1);
-}
-
-// Function to calculate headwind component
-function calculateHeadwind(windDir, windSpeed, runwayHeading) {
-    let angle = Math.abs(windDir - runwayHeading);
-    if (angle > 180) angle = 360 - angle;
-    let headwind = Math.cos(angle * (Math.PI / 180)) * windSpeed;
-    return headwind.toFixed(1);
-}
-
-// Function to calculate pressure altitude
-function calculatePressureAltitude(altimeterSetting, fieldElevation) {
-    const standardPressure = 1013.25;
-     // Approximate conversion
-    return fieldElevation + (standardPressure - altimeterSetting) * 30; // Return as a number
-}
-
-// Function to calculate density altitude
-function calculateDensityAltitude(tempC, fieldElevation, altimeterSetting) {
-    let pressureAltitude = calculatePressureAltitude(altimeterSetting, fieldElevation);
-    // Standard temperature lapse rate
-    let isaTemp = 15 - (0.00198 * fieldElevation); // in °C
-    let densityAltitude = pressureAltitude + (120 * (tempC - isaTemp));
-    return densityAltitude.toFixed(0);
-}
-
-function hpaToInhg(hpa) {
-    const conversionFactor = 0.029529983071445;
-    return hpa * conversionFactor;
-}
+// Optional: Handle Enter key press in the input field
+document.getElementById('weather-input').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        submitAirportId();
+    }
+});
 
 const zuluToLocalReadableTime = zulu => {
     // Extract components from the Zulu time format

@@ -1,4 +1,5 @@
 use std::cmp::Ordering;
+use std::f64::consts::PI;
 use axum::extract::Path;
 use axum::http::{StatusCode};
 use axum::Json;
@@ -7,6 +8,7 @@ use serde_json::{from_str, json};
 use crate::types::{MetarDataRaw, MetarDataReturned};
 use chrono::{Datelike, NaiveDate, TimeZone, Utc, Local};
 use scraper::{ElementRef, Html, Selector};
+use tracing::error;
 
 // Handler function for the /weather/:code route
 pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Json<MetarDataReturned>), (StatusCode, &'static str)> {
@@ -24,6 +26,7 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
         .ok_or((StatusCode::BAD_GATEWAY, "Failed to fetch METAR data"))?;
 
     // Perform calculations
+    let pressure_altitude = calculate_pressure_altitude(metar.altim, extracted_airport_data.field_elevation);
     let altimeter_inhg = hpa_to_inhg(metar.altim);
     let density_altitude = calculate_density_altitude(
         metar.temp,
@@ -34,16 +37,7 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
     // Determine the best runway based on crosswind
     let best_runway_info = extracted_airport_data.runways.iter()
         .map(|runway| {
-            let headwind = calculate_headwind(
-                metar.wdir as f64,
-                metar.wspd as f64,
-                runway.heading_magnetic,
-            );
-            let crosswind = calculate_crosswind(
-                metar.wdir as f64,
-                metar.wspd as f64,
-                runway.heading_magnetic,
-            );
+            let (crosswind, headwind) = calculate_wind_components(metar.wspd as f64, metar.wdir as i32, runway.heading_magnetic as i32);
             (runway, headwind, crosswind)
         })
         .max_by(|a, b| {
@@ -77,6 +71,7 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
         name: metar.name,
         xwind: corresponding_crosswind,
         hwind: best_headwind,
+        pressure_altitude,
         density_altitude,
         best_runway: best_runway.number.clone(),
         runway_length: best_runway.length_ft,
@@ -94,19 +89,54 @@ async fn fetch_metar_data(code: &str) -> Option<MetarDataRaw> {
         code
     );
 
-    // Send the GET request and parse the first item in the array
-    Client::new()
-        .get(&url)
-        .send()
-        .await
-        .ok()?
-        .text()
-        .await
-        .ok()
-        .and_then(|body| {
-            let mut data: Vec<MetarDataRaw> = from_str(&body).ok()?;
-            data.pop()
-        })
+    // Create a new HTTP client
+    let client = Client::new();
+
+    // Send the GET request
+    let response = client.get(&url).send().await;
+
+    match response {
+        Ok(resp) => {
+            if !resp.status().is_success() {
+                error!("Request failed with status: {}", resp.status());
+                return None;
+            }
+
+            // Extract the response text
+            let body = resp.text().await;
+
+            match body {
+                Ok(text) => {
+                    // Parse the JSON response
+                    let data: Result<Vec<MetarDataRaw>, _> = serde_json::from_str(&text);
+
+                    match data {
+                        Ok(mut metar_data) => {
+                            if let Some(last_data) = metar_data.pop() {
+                                // Successfully parsed METAR data
+                                Some(last_data)
+                            } else {
+                                error!("Parsed METAR data is empty for code: {}", code);
+                                None
+                            }
+                        }
+                        Err(e) => {
+                            error!("Failed to parse JSON for code {}: {}", code, e);
+                            None
+                        }
+                    }
+                }
+                Err(e) => {
+                    error!("Failed to read response body for code {}: {}", code, e);
+                    None
+                }
+            }
+        }
+        Err(e) => {
+            error!("HTTP request failed for code {}: {}", code, e);
+            None
+        }
+    }
 }
 
 async fn fetch_html(url: String) -> Option<String> {
@@ -121,34 +151,39 @@ async fn fetch_html(url: String) -> Option<String> {
         .ok()
 }
 
-
-// Function to calculate crosswind component
-fn calculate_crosswind(wind_dir: f64, wind_speed: f64, runway_heading: f64) -> f64 {
-    let mut angle = (wind_dir - runway_heading).abs();
-    if angle > 180.0 {
-        angle = 360.0 - angle;
+fn normalize_angle(angle: f64) -> f64 {
+    let mut normalized = angle % 360.0;
+    if normalized < 0.0 {
+        normalized += 360.0;
     }
-    let crosswind = angle.to_radians().sin() * wind_speed;
-    (crosswind * 10.0).round() / 10.0 // Round to one decimal place
+    normalized
+}
+fn min_angle_difference(angle1: f64, angle2: f64) -> f64 {
+    let angle1 = normalize_angle(angle1);
+    let angle2 = normalize_angle(angle2);
+    let diff = (angle1 - angle2).abs() % 360.0;
+    if diff > 180.0 {
+        360.0 - diff
+    } else {
+        diff
+    }
+}
+fn calculate_wind_components(wind_speed: f64, wind_direction: i32, runway_heading: i32) -> (f64, f64) {
+    let angle_diff = min_angle_difference(wind_direction as f64, runway_heading as f64);
+    let angle_radians = angle_diff * PI / 180.0;
+
+    let crosswind = wind_speed * angle_radians.sin();
+    let headwind = wind_speed * angle_radians.cos();
+
+    (crosswind, headwind)
 }
 
-// Function to calculate headwind component
-fn calculate_headwind(wind_dir: f64, wind_speed: f64, runway_heading: f64) -> f64 {
-    let mut angle = (wind_dir - runway_heading).abs();
-    if angle > 180.0 {
-        angle = 360.0 - angle;
-    }
-    let headwind = angle.to_radians().cos() * wind_speed;
-    (headwind * 10.0).round() / 10.0 // Round to one decimal place
-}
-
-// Function to calculate pressure altitude
 fn calculate_pressure_altitude(altimeter_setting: f64, field_elevation: f64) -> f64 {
     let standard_pressure = 1013.25;
     field_elevation + (standard_pressure - altimeter_setting) * 30.0
 }
 
-// Function to calculate density altitude
+
 fn calculate_density_altitude(temp_c: f64, field_elevation: f64, altimeter_setting: f64) -> f64 {
     let pressure_altitude = calculate_pressure_altitude(altimeter_setting, field_elevation);
     let isa_temp = 15.0 - (0.00198 * field_elevation);

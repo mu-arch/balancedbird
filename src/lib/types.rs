@@ -1,11 +1,23 @@
 use serde::{Deserialize, Serialize};
 
+
+#[derive(Debug, Deserialize)]
+pub enum WindDirection {
+    Degree(i64),
+    Variable(String),
+}
+
+#[derive(Debug, Deserialize)]
+pub enum WindSpeed {
+    Degree(i64),
+    Variable(String),
+}
 #[derive(Debug, Deserialize)]
 pub struct MetarDataRaw {
     pub metar_id: i64,
     pub temp: f64,
     pub dewp: f64,
-    pub wdir: i64,
+    pub wdir: WindDirection,
     pub wspd: i32,
     pub altim: f64,
     #[serde(rename = "rawOb")]
@@ -22,6 +34,7 @@ pub struct MetarDataReturned {
     pub(crate) wspd: i32,
     pub(crate) xwind: f64,
     pub(crate) hwind: f64,
+    pub(crate) pressure_altitude: f64,
     pub(crate) density_altitude: f64,
     pub(crate) altimeter: f64,
     pub(crate) raw_ob: String,
