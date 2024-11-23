@@ -36,7 +36,7 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
     );
 
     // Determine the best runway based on crosswind
-    
+
     let best_runway_info = match metar.wdir {
         WindDirection::Degree(v) => {
             let best_runway_info = extracted_airport_data.runways.iter()
@@ -59,7 +59,7 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
                     }
                 })
                 .ok_or((StatusCode::NOT_FOUND, "No runways available"))?;
-            
+
             best_runway_info
         }
         WindDirection::Variable(_) => (&types::Runway { number: "Indeterminate".to_string(), heading_magnetic: 0f64, length_ft: 0i32 }, 0f64, 0f64)
@@ -182,15 +182,19 @@ fn calculate_wind_components(wind_speed: f64, wind_direction: i32, runway_headin
     let angle_diff = min_angle_difference(wind_direction as f64, runway_heading as f64);
     let angle_radians = angle_diff * PI / 180.0;
 
-    let crosswind = wind_speed * angle_radians.sin();
-    let headwind = wind_speed * angle_radians.cos();
+    let crosswind = ((wind_speed * angle_radians.sin()) * 100f64).round() / 100f64;
+    let headwind = ((wind_speed * angle_radians.cos()) * 100f64).round() / 100f64;
+    
 
     (crosswind, headwind)
 }
 
 fn calculate_pressure_altitude(altimeter_setting: f64, field_elevation: f64) -> f64 {
-    let standard_pressure = 1013.25;
-    field_elevation + (standard_pressure - altimeter_setting) * 30.0
+    let standard_pressure = 1013.25; // in hPa
+    let pressure_altitude = field_elevation + (standard_pressure - altimeter_setting) * 30.0;
+
+    // Round to two decimal places
+    (pressure_altitude * 100.0).round() / 100.0
 }
 
 

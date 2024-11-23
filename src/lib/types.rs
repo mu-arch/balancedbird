@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(untagged)] //By default, Serde expects enums to be internally tagged, meaning the JSON should specify which variant it is using. Because the JSON from aviationweather.gov doesn't provide this tagging we need to inform serde we can't do it with this line
 pub enum WindDirection {
     Degree(i32),
     Variable(String),

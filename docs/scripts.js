@@ -346,8 +346,8 @@ function updateWeatherTable(response) {
 
     // Row 5: Temp / Dew Pt. and Pressure Altitude
     rows[4].cells[1].innerHTML = (response.temp !== undefined && response.dewp !== undefined) ? `${response.temp}° / ${response.dewp}°` : 'N/A';
-    // Pressure Altitude is not provided in the JSON; setting as 'N/A'
-    rows[4].cells[3].innerHTML = 'N/A';
+
+    rows[4].cells[3].innerHTML = response.pressure_altitude ? `${response.pressure_altitude} ft` : 'N/A';
 
     // Row 6: Altimeter and Density Altitude
     rows[5].cells[1].innerHTML = response.altimeter ? `${response.altimeter} in` : 'N/A';
