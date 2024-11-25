@@ -9,6 +9,12 @@ mod types;
 #[path = "lib/helper.rs"]
 mod helper;
 
+#[path = "lib/rx.rs"]
+mod rx;
+
+#[path = "test/helper.rs"]
+mod _test_helper;
+
 #[tokio::main]
 async fn main() {
 

@@ -10,11 +10,12 @@ use chrono::{Datelike, NaiveDate, TimeZone, Utc, Local};
 use scraper::{ElementRef, Html, Selector};
 use tracing::error;
 use crate::types;
+use crate::rx;
 
 // Handler function for the /weather/:code route
 pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Json<MetarDataReturned>), (StatusCode, &'static str)> {
     // Fetch airport data
-    let airnav_page_data = fetch_html(format!("https://www.airnav.com/airport/{}", &code))
+    let airnav_page_data = rx::fetch_html(format!("https://www.airnav.com/airport/{}", &code))
         .await
         .ok_or((StatusCode::BAD_GATEWAY, "Network error"))?;
 
@@ -23,7 +24,7 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
         .ok_or((StatusCode::NOT_FOUND, "Airport not found"))?;
     
     // Fetch METAR data
-    let metar = fetch_metar_data(&code).await
+    let metar = rx::fetch_metar_data(&code).await
         .ok_or((StatusCode::BAD_GATEWAY, "Failed to fetch METAR data"))?;
 
     // Perform calculations
@@ -36,13 +37,14 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
     );
 
     // Determine the best runway based on crosswind
-
+    
+    
     let best_runway_info = match metar.wdir {
         WindDirection::Degree(v) => {
             let best_runway_info = extracted_airport_data.runways.iter()
                 .map(|runway| {
                     let (crosswind, headwind) = calculate_wind_components(metar.wspd as f64, v, runway.heading_magnetic as i32);
-                    (runway, headwind, crosswind)
+                    (runway, headwind, crosswind, runway.heading_magnetic)
                 })
                 .max_by(|a, b| {
                     // First, compare headwinds
@@ -62,10 +64,10 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
 
             best_runway_info
         }
-        WindDirection::Variable(_) => (&types::Runway { number: "Indeterminate".to_string(), heading_magnetic: 0f64, length_ft: 0i32 }, 0f64, 0f64)
+        WindDirection::Variable(_) => (&types::Runway { number: "Indeterminate".to_string(), heading_magnetic: 0f64, length_ft: 0i32 }, 0f64, 0f64, 0f64)
     };
 
-    let (best_runway, best_headwind, corresponding_crosswind) = best_runway_info;
+    let (best_runway, best_headwind, corresponding_crosswind,best_runway_heading_mag ) = best_runway_info;
 
 
     // Prepare the response data
@@ -77,13 +79,18 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
         wdir: metar.wdir,
         wspd: metar.wspd,
         altimeter: altimeter_inhg,
-        raw_ob: metar.raw_ob,
+        raw_ob: metar.raw_ob.clone(),
+        obs_time: extract_observation_time(&metar.raw_ob),
+        server_time: std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs().to_string(),
         name: metar.name,
         xwind: corresponding_crosswind,
         hwind: best_headwind,
+        gxwind: 0.0,
+        ghwind: 0.0,
         pressure_altitude,
         density_altitude,
         best_runway: best_runway.number.clone(),
+        best_runway_heading_magnetic: best_runway_heading_mag,
         runway_length: best_runway.length_ft,
         field_elevation: extracted_airport_data.field_elevation,
         diagram_link: extracted_airport_data.airport_diagram_link,
@@ -93,93 +100,28 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
     Ok((StatusCode::OK, Json(metar_data_returned)))
 }
 
-async fn fetch_metar_data(code: &str) -> Option<MetarDataRaw> {
-    let url = format!(
-        "https://aviationweather.gov/api/data/metar?ids={}&format=json",
-        code
-    );
-
-    // Create a new HTTP client
-    let client = Client::new();
-
-    // Send the GET request
-    let response = client.get(&url).send().await;
-
-    match response {
-        Ok(resp) => {
-            if !resp.status().is_success() {
-                error!("Request failed with status: {}", resp.status());
-                return None;
-            }
-
-            // Extract the response text
-            let body = resp.text().await;
-
-            match body {
-                Ok(text) => {
-                    // Parse the JSON response
-                    let data: Result<Vec<MetarDataRaw>, _> = serde_json::from_str(&text);
-
-                    match data {
-                        Ok(mut metar_data) => {
-                            if let Some(last_data) = metar_data.pop() {
-                                // Successfully parsed METAR data
-                                Some(last_data)
-                            } else {
-                                error!("Parsed METAR data is empty for code: {}", code);
-                                None
-                            }
-                        }
-                        Err(e) => {
-                            error!("Failed to parse JSON for code {}: {}", code, e);
-                            None
-                        }
-                    }
-                }
-                Err(e) => {
-                    error!("Failed to read response body for code {}: {}", code, e);
-                    None
-                }
-            }
-        }
-        Err(e) => {
-            error!("HTTP request failed for code {}: {}", code, e);
-            None
-        }
-    }
-}
-
-async fn fetch_html(url: String) -> Option<String> {
-    // Send the GET request and return the HTML content
-    Client::new()
-        .get(url)
-        .send()
-        .await
-        .ok()?
-        .text()
-        .await
-        .ok()
-}
-
-fn normalize_angle(angle: f64) -> f64 {
+pub fn normalize_angle(angle: f64) -> f64 {
     let mut normalized = angle % 360.0;
     if normalized < 0.0 {
         normalized += 360.0;
     }
     normalized
 }
-fn min_angle_difference(angle1: f64, angle2: f64) -> f64 {
+fn signed_angle_difference(angle1: f64, angle2: f64) -> f64 {
     let angle1 = normalize_angle(angle1);
     let angle2 = normalize_angle(angle2);
-    let diff = (angle1 - angle2).abs() % 360.0;
+    let mut diff = angle1 - angle2;
+
     if diff > 180.0 {
-        360.0 - diff
-    } else {
-        diff
+        diff -= 360.0;
+    } else if diff < -180.0 {
+        diff += 360.0;
     }
+
+    diff
 }
-fn calculate_wind_components(wind_speed: f64, wind_direction: i32, runway_heading: i32) -> (f64, f64) {
-    let angle_diff = min_angle_difference(wind_direction as f64, runway_heading as f64);
+pub fn calculate_wind_components(wind_speed: f64, wind_direction: i32, runway_heading: i32) -> (f64, f64) {
+    let angle_diff = signed_angle_difference(wind_direction as f64, runway_heading as f64);
     let angle_radians = angle_diff * PI / 180.0;
 
     let crosswind = ((wind_speed * angle_radians.sin()) * 100f64).round() / 100f64;
@@ -237,6 +179,28 @@ fn zulu_to_local_readable_time(zulu: &str) -> String {
         }
     } else {
         "Invalid date".to_string()
+    }
+}
+
+fn extract_observation_time(metar: &str) -> String {
+    // Split the METAR string into whitespace-separated tokens
+    let tokens: Vec<&str> = metar.split_whitespace().collect();
+
+    // The observation time is typically the second token
+    if tokens.len() < 2 {
+        return String::new();
+    }
+
+    let obs_time = tokens[1];
+
+    // Check if the observation time matches the pattern: 6 digits followed by 'Z'
+    if obs_time.len() == 7
+        && obs_time[..6].chars().all(|c| c.is_digit(10))
+        && obs_time.ends_with('Z')
+    {
+        obs_time.to_string()
+    } else {
+        String::new()
     }
 }
 

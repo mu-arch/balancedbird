@@ -289,7 +289,7 @@ function submitAirportId() {
                             var response = JSON.parse(http.responseText);
                             updateWeatherTable(response);
 
-                            document.getElementById('weather-text').style.display = "none";
+                            document.getElementById('weather-text').innerHTML = response.raw_ob || 'N/A';
                             document.getElementById('weather-table').style.display = "block";
                         } else {
                             let metar_error = "Something went wrong. The weather system may be down or the server is not responding.";
@@ -325,18 +325,23 @@ function updateWeatherTable(response) {
         return match ? match[1] : 'N/A';
     }
 
+
+
     // Row 1: Airport and Best Runway
     rows[0].cells[1].innerHTML = response.name || 'N/A';
-    rows[0].cells[3].innerHTML = response.best_runway || 'N/A';
+    rows[0].cells[3].innerHTML = response.best_runway
+        ? `${response.best_runway} (${response.best_runway_heading_magnetic}°)`
+        : 'N/A';
+
 
     // Row 2: Observation and Crosswind
-    rows[1].cells[1].innerHTML = response.raw_ob || 'N/A';
-    rows[1].cells[3].innerHTML = response.xwind ? response.xwind.toFixed(1) + ' KT' : 'N/A';
+    rows[1].cells[1].innerHTML = zuluToLocalReadableTime(response.obs_time) + " Local" || 'N/A';
+    rows[1].cells[3].innerHTML = response.xwind ? response.xwind.toFixed(1) + ' kt' : 'N/A';
 
     // Row 3: Surface Wind and Headwind
-    var surfaceWind = (response.wdir && response.wspd) ? `${response.wdir}° ${response.wspd} KT` : 'N/A';
+    var surfaceWind = (response.wdir && response.wspd) ? `${response.wdir}° - ${response.wspd} kt` : 'N/A';
     rows[2].cells[1].innerHTML = surfaceWind;
-    rows[2].cells[3].innerHTML = response.hwind ? response.hwind.toFixed(1) + ' KT' : 'N/A';
+    rows[2].cells[3].innerHTML = response.hwind ? response.hwind.toFixed(1) + ' kt' : 'N/A';
 
     // Row 4: Vis / Weather and Field Elevation
     var visibility = parseVisibility(response.raw_ob);
@@ -350,7 +355,7 @@ function updateWeatherTable(response) {
     rows[4].cells[3].innerHTML = response.pressure_altitude ? `${response.pressure_altitude} ft` : 'N/A';
 
     // Row 6: Altimeter and Density Altitude
-    rows[5].cells[1].innerHTML = response.altimeter ? `${response.altimeter} in` : 'N/A';
+    rows[5].cells[1].innerHTML = response.altimeter ? `${response.altimeter} inHg` : 'N/A';
     rows[5].cells[3].innerHTML = response.density_altitude ? `${response.density_altitude} ft` : 'N/A';
 }
 
