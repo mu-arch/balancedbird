@@ -3,29 +3,27 @@ use std::f64::consts::PI;
 use axum::extract::Path;
 use axum::http::{StatusCode};
 use axum::Json;
-use reqwest::{Client, Error as ReqwestError};
-use serde_json::{from_str, json};
-use crate::types::{AirportInfo, MetarDataRaw, MetarDataReturned, Runway, WindDirection};
+use crate::types::{AirportInfo, MetarDataReturned, Runway, WindDirection};
 use chrono::{Datelike, NaiveDate, TimeZone, Utc, Local};
 use scraper::{ElementRef, Html, Selector};
-use tracing::error;
 use crate::types;
 use crate::rx;
 
 // Handler function for the /weather/:code route
 pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Json<MetarDataReturned>), (StatusCode, &'static str)> {
-    // Fetch airport data
+    
+    // Fetch METAR step
+    let metar = rx::fetch_metar_data(&code).await
+        .ok_or((StatusCode::BAD_GATEWAY, "Failed to fetch METAR data. That airport may not exist or isn't currently reporting."))?;
+    
+    // Fetch airport data from Airnav step
     let airnav_page_data = rx::fetch_html(format!("https://www.airnav.com/airport/{}", &code))
         .await
-        .ok_or((StatusCode::BAD_GATEWAY, "Network error"))?;
+        .ok_or((StatusCode::BAD_GATEWAY, "Network error while downloading airport data"))?;
 
-    // Extract airport information
+    // Extract airport information from the scraper
     let extracted_airport_data = extract_airport_info(&airnav_page_data)
         .ok_or((StatusCode::NOT_FOUND, "Airport not found"))?;
-    
-    // Fetch METAR data
-    let metar = rx::fetch_metar_data(&code).await
-        .ok_or((StatusCode::BAD_GATEWAY, "Failed to fetch METAR data"))?;
 
     // Perform calculations
     let pressure_altitude = calculate_pressure_altitude(metar.altim, extracted_airport_data.field_elevation);
@@ -37,7 +35,6 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
     );
 
     // Determine the best runway based on crosswind
-    
     
     let best_runway_info = match metar.wdir {
         WindDirection::Degree(v) => {
@@ -95,8 +92,7 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
         field_elevation: extracted_airport_data.field_elevation,
         diagram_link: extracted_airport_data.airport_diagram_link,
     };
-
-    // Return the successful response
+    
     Ok((StatusCode::OK, Json(metar_data_returned)))
 }
 

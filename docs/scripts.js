@@ -2,7 +2,7 @@
 
 let maxToWt = 0;
 let maxLdgWt = 0;
-const loader ="<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1em\" height=\"1em\" viewBox=\"0 0 24 24\"><rect width=\"7.33\" height=\"7.33\" x=\"1\" y=\"1\" fill=\"currentColor\"><animate id=\"svgSpinnersBlocksWave0\" attributeName=\"x\" begin=\"0;svgSpinnersBlocksWave1.end+0.2s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"y\" begin=\"0;svgSpinnersBlocksWave1.end+0.2s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"width\" begin=\"0;svgSpinnersBlocksWave1.end+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"0;svgSpinnersBlocksWave1.end+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"8.33\" y=\"1\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"1\" y=\"8.33\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"15.66\" y=\"1\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"8.33\" y=\"8.33\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"1\" y=\"15.66\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"15.66\" y=\"8.33\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"8.33\" y=\"15.66\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"15.66\" y=\"15.66\" fill=\"currentColor\"><animate id=\"svgSpinnersBlocksWave1\" attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.4s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.4s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.4s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.4s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect></svg>";
+const loader ="<svg style='position:relative; top:2px;' xmlns=\"http://www.w3.org/2000/svg\" width=\"1em\" height=\"1em\" viewBox=\"0 0 24 24\"><rect width=\"7.33\" height=\"7.33\" x=\"1\" y=\"1\" fill=\"currentColor\"><animate id=\"svgSpinnersBlocksWave0\" attributeName=\"x\" begin=\"0;svgSpinnersBlocksWave1.end+0.2s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"y\" begin=\"0;svgSpinnersBlocksWave1.end+0.2s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"width\" begin=\"0;svgSpinnersBlocksWave1.end+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"0;svgSpinnersBlocksWave1.end+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"8.33\" y=\"1\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"1\" y=\"8.33\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.1s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"15.66\" y=\"1\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"8.33\" y=\"8.33\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"1\" y=\"15.66\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"1;4;1\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.2s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"15.66\" y=\"8.33\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"8.33\" y=\"15.66\" fill=\"currentColor\"><animate attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"8.33;11.33;8.33\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.3s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect><rect width=\"7.33\" height=\"7.33\" x=\"15.66\" y=\"15.66\" fill=\"currentColor\"><animate id=\"svgSpinnersBlocksWave1\" attributeName=\"x\" begin=\"svgSpinnersBlocksWave0.begin+0.4s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"y\" begin=\"svgSpinnersBlocksWave0.begin+0.4s\" dur=\"0.6s\" values=\"15.66;18.66;15.66\"/><animate attributeName=\"width\" begin=\"svgSpinnersBlocksWave0.begin+0.4s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/><animate attributeName=\"height\" begin=\"svgSpinnersBlocksWave0.begin+0.4s\" dur=\"0.6s\" values=\"7.33;1.33;7.33\"/></rect></svg>";
 
 
 
@@ -260,19 +260,23 @@ function checkEnter(event) {
 function getRandomDelay() {
     return Math.floor(Math.random() * (2000 - 100 + 1)) + 500;
 }
-
-// scripts.js
-
-// Function to submit the airport ID and fetch weather data
+/*
 function submitAirportId() {
     const airportId = document.getElementById('weather-input').value.trim().toUpperCase();
+
     document.getElementById('weather-table').style.display = "none";
     document.getElementById('weather-text').style.display = "block";
+
+    if (airportId.length === 0) {
+        document.getElementById('weather-text').innerHTML = "Airport ICAO identifier cannot be empty.";
+
+        return
+    }
 
     document.getElementById('weather-text').innerHTML = loader + " Please wait. Contacting FAA systems...";
 
     delay(400, function() {
-        document.getElementById('weather-text').innerHTML = loader + " Waiting for FAA database response...";
+        document.getElementById('weather-text').innerHTML = loader + " Web scraping and compiling sources...";
 
         delay(300, function() {
             document.getElementById('weather-text').innerHTML = loader + " Acquiring latest weather observation from aviationweather.gov...";
@@ -308,22 +312,61 @@ function submitAirportId() {
     }
 }
 
+ */
+
+// Utility function to create delays
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function submitAirportId() {
+    const airportId = document.getElementById('weather-input').value.trim().toUpperCase();
+
+    document.getElementById('weather-table').style.display = "none";
+    document.getElementById('weather-text').style.display = "block";
+
+    if (airportId.length === 0) {
+        document.getElementById('weather-text').innerHTML = "Airport ICAO identifier cannot be empty.";
+        return;
+    }
+    document.getElementById('weather-text').innerHTML = loader + " Downloading and processing FAA.gov airport database...";
+
+
+    try {
+
+        // Initiate the web request immediately using fetch
+        const response = await fetch('http://127.0.0.1:3000/weather/' + airportId);
+
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
+
+        const data = await response.json();
+        updateWeatherTable(data);
+
+
+        document.getElementById('weather-text').innerHTML = loader + " Acquiring latest observation from aviationweather.gov...";
+
+
+        // Perform the second delay of 300ms
+        await delay(1200);
+
+        document.getElementById('weather-text').innerHTML = data.raw_ob || 'N/A';
+        document.getElementById('weather-table').style.display = "block";
+
+    } catch (error) {
+        // Handle errors gracefully
+        document.getElementById('weather-text').innerHTML = error.message;
+    }
+}
+
 // New function to update the weather table with the JSON response
 function updateWeatherTable(response) {
     // Select the weather table
     var table = document.querySelector('#weather-table table.std');
     var rows = table.rows;
 
-    // Helper functions to parse visibility and weather from raw_ob
-    function parseVisibility(ob) {
-        var match = ob.match(/(\d+)?\s*SM/);
-        return match ? match[0] : 'N/A';
-    }
 
-    function parseWeather(ob) {
-        var match = ob.match(/SM\s+(\w+)/);
-        return match ? match[1] : 'N/A';
-    }
 
 
 
@@ -335,28 +378,45 @@ function updateWeatherTable(response) {
 
 
     // Row 2: Observation and Crosswind
-    rows[1].cells[1].innerHTML = zuluToLocalReadableTime(response.obs_time) + " Local" || 'N/A';
-    rows[1].cells[3].innerHTML = response.xwind ? response.xwind.toFixed(1) + ' kt' : 'N/A';
+    rows[1].cells[1].innerHTML = zuluToLocalReadableTime(response.obs_time) + " Local" || 'Unknown';
+
+    if (response.xwind !== undefined && response.xwind !== null) {
+        // Determine if xwind is negative
+        if (response.xwind < 0) {
+            // Make the value positive and append "from left"
+            const windSpeed = Math.abs(response.xwind).toFixed(1) + ' kt';
+            const windDirection = ' from left';
+            rows[1].cells[3].innerHTML = windSpeed + windDirection;
+        } else {
+            // Append "from right" (value remains positive or zero)
+            const windSpeed = response.xwind.toFixed(1) + ' kt';
+            const windDirection = ' from right';
+            rows[1].cells[3].innerHTML = windSpeed + windDirection;
+        }
+    } else {
+        // Handle the case where xwind is not available
+        rows[1].cells[3].innerHTML = 'Not available';
+    }
 
     // Row 3: Surface Wind and Headwind
-    var surfaceWind = (response.wdir && response.wspd) ? `${response.wdir}° - ${response.wspd} kt` : 'N/A';
+    var surfaceWind = (response.wdir && response.wspd) ? `${response.wdir}° - ${response.wspd} kt` : 'Not available';
     rows[2].cells[1].innerHTML = surfaceWind;
-    rows[2].cells[3].innerHTML = response.hwind ? response.hwind.toFixed(1) + ' kt' : 'N/A';
+    rows[2].cells[3].innerHTML = response.hwind ? response.hwind.toFixed(1) + ' kt' : 'Not available';
 
     // Row 4: Vis / Weather and Field Elevation
     var visibility = parseVisibility(response.raw_ob);
     var weather = parseWeather(response.raw_ob);
     rows[3].cells[1].innerHTML = `${visibility} / ${weather}`;
-    rows[3].cells[3].innerHTML = response.field_elevation ? `${response.field_elevation} ft` : 'N/A';
+    rows[3].cells[3].innerHTML = response.field_elevation ? `${response.field_elevation} ft` : 'Not available';
 
     // Row 5: Temp / Dew Pt. and Pressure Altitude
-    rows[4].cells[1].innerHTML = (response.temp !== undefined && response.dewp !== undefined) ? `${response.temp}° / ${response.dewp}°` : 'N/A';
+    rows[4].cells[1].innerHTML = (response.temp !== undefined && response.dewp !== undefined) ? `${response.temp}° / ${response.dewp}°` : 'Not available';
 
-    rows[4].cells[3].innerHTML = response.pressure_altitude ? `${response.pressure_altitude} ft` : 'N/A';
+    rows[4].cells[3].innerHTML = response.pressure_altitude ? `${response.pressure_altitude} ft` : 'Not available';
 
     // Row 6: Altimeter and Density Altitude
-    rows[5].cells[1].innerHTML = response.altimeter ? `${response.altimeter} inHg` : 'N/A';
-    rows[5].cells[3].innerHTML = response.density_altitude ? `${response.density_altitude} ft` : 'N/A';
+    rows[5].cells[1].innerHTML = response.altimeter ? `${response.altimeter} inHg` : 'Not available';
+    rows[5].cells[3].innerHTML = response.density_altitude ? `${response.density_altitude} ft` : 'Not available';
 }
 
 // Event listener for the "Load Airport Information" button
@@ -368,6 +428,17 @@ document.getElementById('weather-input').addEventListener('keydown', function(ev
         submitAirportId();
     }
 });
+
+// Helper functions to parse visibility and weather from raw_ob
+function parseVisibility(ob) {
+    var match = ob.match(/(\d+)?\s*SM/);
+    return match ? match[0] : 'N/A';
+}
+
+function parseWeather(ob) {
+    var match = ob.match(/SM\s+(\w+)/);
+    return match ? match[1] : 'N/A';
+}
 
 const zuluToLocalReadableTime = zulu => {
     // Extract components from the Zulu time format

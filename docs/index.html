@@ -279,7 +279,7 @@
     <input onkeydown="checkEnter(event)" id="weather-input" placeholder="Ex. KDTO">
     <button type="button" onclick="submitAirportId()">Load Airport Information</button>
 
-    <p style="display:none;" id="weather-text"></p>
+    <h6 style="display:none;" id="weather-text"></h6>
 
 
     <div id="weather-table" style="display: none">
@@ -330,13 +330,17 @@
         <h4>Latest Surface Analysis & Forecast:</h4>
         <p>(Click to enlarge)</p>
 
+        <div class="image-container">
+
         <a href="https://www.wpc.ncep.noaa.gov/sfc/namfntsfcwbg.gif" target="_blank">
-            <img src="https://www.wpc.ncep.noaa.gov/sfc/namfntsfcwbg.gif" />
+            <img class="image-container" src="https://www.wpc.ncep.noaa.gov/sfc/namfntsfcwbg.gif" />
         </a>
 
         <a href="https://www.wpc.ncep.noaa.gov/noaa/noaad1.gif?1731912894" target="_blank">
-            <img src="https://www.wpc.ncep.noaa.gov/noaa/noaad1.gif?1731912894" />
+            <img class="image-container" src="https://www.wpc.ncep.noaa.gov/noaa/noaad1.gif?1731912894" />
         </a>
+
+        </div>
 
         <div><p><a href="https://aviationweather.gov/gfa/#obs" target="_blank">Click to view weather radar on aviationweather.gov</a></p></div>
 

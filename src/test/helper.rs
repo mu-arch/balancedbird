@@ -37,7 +37,7 @@ mod tests {
     #[test]
     fn test_calculate_wind_components() {
         
-
+        // Random crosswinds
         let (crosswind, headwind) = calculate_wind_components(8.0, 137, 180);
         assert_relative_eq!(crosswind, -5.46, epsilon = 1e-2);
         assert_relative_eq!(headwind, 5.85, epsilon = 1e-2);

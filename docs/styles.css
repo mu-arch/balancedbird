@@ -118,6 +118,11 @@ h1 {
     letter-spacing: -3px;
 }
 
+h6 {
+    padding:30px 0;
+
+}
+
 .preset_box {
     height: 120px;
     min-width: 170px;
@@ -347,13 +352,23 @@ h4 {
     font-weight: 700;
 }
 
-#weather img {
-    border: 1px solid #bbb;
-    max-width: 400px;
-    padding: 10px;
-    display: inline-block;
-    cursor:pointer;
+.image-container {
+    display: flex; /* Use flexbox for side-by-side layout */
+    justify-content: space-between; /* Use all horizontal space */
+    gap: 10px; /* Add space between images */
+    align-items: center; /* Align images vertically */
+    width: 100%; /* Allow the container to span the full width */
 }
+
+.image-container img {
+    width: 49%; /* Each image takes up half the available space minus the gap */
+    height: auto; /* Maintain aspect ratio */
+    border: 1px solid #bbb; /* Add border for clarity */
+    padding: 10px; /* Add padding inside the border */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+    cursor: pointer; /* Add a pointer cursor on hover */
+}
+
 
 ul {
 
