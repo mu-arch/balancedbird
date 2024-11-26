@@ -361,12 +361,12 @@ h4 {
 }
 
 .image-container img {
-    width: 49%; /* Each image takes up half the available space minus the gap */
     height: auto; /* Maintain aspect ratio */
     border: 1px solid #bbb; /* Add border for clarity */
     padding: 10px; /* Add padding inside the border */
     box-sizing: border-box; /* Ensure padding is included in the width */
     cursor: pointer; /* Add a pointer cursor on hover */
+    max-height:400px;
 }
 
 

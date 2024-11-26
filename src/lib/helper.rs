@@ -3,14 +3,14 @@ use std::f64::consts::PI;
 use axum::extract::Path;
 use axum::http::{StatusCode};
 use axum::Json;
-use crate::types::{AirportInfo, MetarDataReturned, Runway, WindDirection};
+use crate::types::{AirportInfo, WeatherDataReturned, Runway, WindDirection};
 use chrono::{Datelike, NaiveDate, TimeZone, Utc, Local};
 use scraper::{ElementRef, Html, Selector};
 use crate::types;
 use crate::rx;
 
 // Handler function for the /weather/:code route
-pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Json<MetarDataReturned>), (StatusCode, &'static str)> {
+pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Json<WeatherDataReturned>), (StatusCode, &'static str)> {
     
     // Fetch METAR step
     let metar = rx::fetch_metar_data(&code).await
@@ -41,7 +41,16 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
             let best_runway_info = extracted_airport_data.runways.iter()
                 .map(|runway| {
                     let (crosswind, headwind) = calculate_wind_components(metar.wspd as f64, v, runway.heading_magnetic as i32);
-                    (runway, headwind, crosswind, runway.heading_magnetic)
+                    let (gust_crosswind, gust_headwind) = match metar.wgst {
+                        None => (None, None),
+                        Some(gust_speed) => {
+                            
+                            let (gust_crosswind, gust_headwind) = calculate_wind_components(gust_speed as f64, v, runway.heading_magnetic as i32);
+                            (Some(gust_crosswind), Some(gust_headwind))
+                        }
+                    };
+
+                    (runway, headwind, crosswind, runway.heading_magnetic, gust_crosswind, gust_headwind)
                 })
                 .max_by(|a, b| {
                     // First, compare headwinds
@@ -61,20 +70,22 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
 
             best_runway_info
         }
-        WindDirection::Variable(_) => (&types::Runway { number: "Indeterminate".to_string(), heading_magnetic: 0f64, length_ft: 0i32 }, 0f64, 0f64, 0f64)
+        WindDirection::Variable(_) => (&types::Runway { number: "Indeterminate".to_string(), heading_magnetic: 0f64, length_ft: 0i32 }, 0f64, 0f64, 0f64, None, None)
     };
 
-    let (best_runway, best_headwind, corresponding_crosswind,best_runway_heading_mag ) = best_runway_info;
+    let (best_runway, best_headwind, corresponding_crosswind,best_runway_heading_mag, gust_crosswind, gust_headwind ) = best_runway_info;
+
 
 
     // Prepare the response data
     // if the wind dir was VRB ignore basically all the values in the response because they will be zero or wrong because they do not apply at all since we cannot compute anything when with is VRB
-    let metar_data_returned = MetarDataReturned {
+    let metar_data_returned = WeatherDataReturned {
         metar_id: metar.metar_id,
         temp: metar.temp,
         dewp: metar.dewp,
         wdir: metar.wdir,
         wspd: metar.wspd,
+        wgst: metar.wgst,
         altimeter: altimeter_inhg,
         raw_ob: metar.raw_ob.clone(),
         obs_time: extract_observation_time(&metar.raw_ob),
@@ -82,8 +93,8 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
         name: metar.name,
         xwind: corresponding_crosswind,
         hwind: best_headwind,
-        gxwind: 0.0,
-        ghwind: 0.0,
+        gxwind: gust_crosswind,
+        ghwind: gust_headwind,
         pressure_altitude,
         density_altitude,
         best_runway: best_runway.number.clone(),
@@ -152,6 +163,7 @@ fn hpa_to_inhg(hpa: f64) -> f64 {
 
 
 // Function to convert Zulu time to local readable time
+/*
 fn zulu_to_local_readable_time(zulu: &str) -> String {
     if zulu.len() < 6 {
         return "Invalid Zulu time format".to_string();
@@ -177,6 +189,8 @@ fn zulu_to_local_readable_time(zulu: &str) -> String {
         "Invalid date".to_string()
     }
 }
+
+ */
 
 fn extract_observation_time(metar: &str) -> String {
     // Split the METAR string into whitespace-separated tokens

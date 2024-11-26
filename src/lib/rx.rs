@@ -1,6 +1,6 @@
 use reqwest::{Client, Error as ReqwestError};
 use serde_json::{from_str, json};
-use crate::types::{MetarDataRaw, MetarDataReturned, Runway, WindDirection};
+use crate::types::{MetarDataRaw, WeatherDataReturned, Runway, WindDirection};
 use tracing::error;
 
 pub(crate) async fn fetch_metar_data(code: &str) -> Option<MetarDataRaw> {

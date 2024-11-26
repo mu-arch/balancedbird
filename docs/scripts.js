@@ -380,43 +380,38 @@ function updateWeatherTable(response) {
     // Row 2: Observation and Crosswind
     rows[1].cells[1].innerHTML = zuluToLocalReadableTime(response.obs_time) + " Local" || 'Unknown';
 
-    if (response.xwind !== undefined && response.xwind !== null) {
-        // Determine if xwind is negative
-        if (response.xwind < 0) {
-            // Make the value positive and append "from left"
-            const windSpeed = Math.abs(response.xwind).toFixed(1) + ' kt';
-            const windDirection = ' from left';
-            rows[1].cells[3].innerHTML = windSpeed + windDirection;
-        } else {
-            // Append "from right" (value remains positive or zero)
-            const windSpeed = response.xwind.toFixed(1) + ' kt';
-            const windDirection = ' from right';
-            rows[1].cells[3].innerHTML = windSpeed + windDirection;
-        }
-    } else {
-        // Handle the case where xwind is not available
-        rows[1].cells[3].innerHTML = 'Not available';
-    }
 
-    // Row 3: Surface Wind and Headwind
-    var surfaceWind = (response.wdir && response.wspd) ? `${response.wdir}° - ${response.wspd} kt` : 'Not available';
+
+
+    var surfaceWind = (response.wdir && response.wspd)
+        ? `${response.wdir}° ${response.wspd}kt` + (response.wgst ? ` G${response.wgst}` : '')
+        : 'Not available';
     rows[2].cells[1].innerHTML = surfaceWind;
-    rows[2].cells[3].innerHTML = response.hwind ? response.hwind.toFixed(1) + ' kt' : 'Not available';
+
+
+    rows[1].cells[3].innerHTML = response.xwind
+        ? response.xwind.toFixed(1) + 'kt' + (response.gxwind ? ' G' + response.gxwind.toFixed(1) : '')
+        : 'Not available';
+
+// Update Headwind Cell
+    rows[2].cells[3].innerHTML = response.hwind
+        ? response.hwind.toFixed(1) + 'kt' + (response.ghwind ? ' G' + response.ghwind.toFixed(1) : '')
+        : 'Not available';
 
     // Row 4: Vis / Weather and Field Elevation
     var visibility = parseVisibility(response.raw_ob);
     var weather = parseWeather(response.raw_ob);
     rows[3].cells[1].innerHTML = `${visibility} / ${weather}`;
-    rows[3].cells[3].innerHTML = response.field_elevation ? `${response.field_elevation} ft` : 'Not available';
+    rows[3].cells[3].innerHTML = response.field_elevation ? `${response.field_elevation}ft` : 'Not available';
 
     // Row 5: Temp / Dew Pt. and Pressure Altitude
     rows[4].cells[1].innerHTML = (response.temp !== undefined && response.dewp !== undefined) ? `${response.temp}° / ${response.dewp}°` : 'Not available';
 
-    rows[4].cells[3].innerHTML = response.pressure_altitude ? `${response.pressure_altitude} ft` : 'Not available';
+    rows[4].cells[3].innerHTML = response.pressure_altitude ? `${response.pressure_altitude}ft` : 'Not available';
 
     // Row 6: Altimeter and Density Altitude
     rows[5].cells[1].innerHTML = response.altimeter ? `${response.altimeter} inHg` : 'Not available';
-    rows[5].cells[3].innerHTML = response.density_altitude ? `${response.density_altitude} ft` : 'Not available';
+    rows[5].cells[3].innerHTML = response.density_altitude ? `${response.density_altitude}ft` : 'Not available';
 }
 
 // Event listener for the "Load Airport Information" button

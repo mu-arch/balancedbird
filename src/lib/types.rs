@@ -19,19 +19,29 @@ pub struct MetarDataRaw {
     #[serde(rename = "rawOb")]
     pub raw_ob: String,
     pub name: String,
+    pub wgst: Option<i32>
+}
+
+struct Metar {
+    wdir: WindDirection,
+    wspd: f64, 
+    gust: Option<f64>, 
+    peak_wind_dir: Option<i32>,
+    peak_wind_speed: Option<f64>, 
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct MetarDataReturned {
+pub struct WeatherDataReturned {
     pub(crate) metar_id: i64,
     pub(crate) temp: f64,
     pub(crate) dewp: f64,
     pub(crate) wdir: WindDirection,
     pub(crate) wspd: i32,
+    pub wgst: Option<i32>,
     pub(crate) xwind: f64,
     pub(crate) hwind: f64,
-    pub(crate) gxwind: f64,
-    pub(crate) ghwind: f64,
+    pub(crate) gxwind: Option<f64>,
+    pub(crate) ghwind: Option<f64>,
     pub(crate) pressure_altitude: f64,
     pub(crate) density_altitude: f64,
     pub(crate) altimeter: f64,
