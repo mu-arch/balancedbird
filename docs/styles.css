@@ -49,15 +49,29 @@ table {
 }
 
 body {
-    padding: 0 40px;
-    margin: auto;
-    max-width: 1000px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", Arial, sans-serif
+
+
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", Arial, sans-serif;
 }
 
 header {
-    padding: 30px 50px;
-    margin: 50px 0 20px 0;
+    padding: 30px 50px 40px 50px;
+    margin: 0 0 20px 0;
+    position: relative;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.header-content {
+margin:auto;
+    max-width: 900px;
+
+}
+
+.body {
+    padding: 0 40px;
+    margin: auto;
+    max-width: 1000px;
 }
 
 header p {
@@ -66,12 +80,20 @@ header p {
     line-height: 30px;
 }
 
+header img:first-child {
+    max-width: 200px;
+    position: relative;
+    left: -10px;
+    margin-bottom: 20px;
+}
+
 .author {
     margin-top: 10px;
     cursor: pointer;
+
 }
 
-header .author img{
+header .author img {
     width: 45px;
     height: 45px;
     border-radius: 200px;

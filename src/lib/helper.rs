@@ -44,7 +44,6 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
                     let (gust_crosswind, gust_headwind) = match metar.wgst {
                         None => (None, None),
                         Some(gust_speed) => {
-                            
                             let (gust_crosswind, gust_headwind) = calculate_wind_components(gust_speed as f64, v, runway.heading_magnetic as i32);
                             (Some(gust_crosswind), Some(gust_headwind))
                         }
