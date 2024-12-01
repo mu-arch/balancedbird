@@ -9,585 +9,606 @@
 
 <header>
     <div class="header-content">
-    <img alt="BalancedBird" src="img/logo-min.png">
-    <p>The free & easy-to-use aircraft weight and balance program.</p>
-    <div class="author">
-        <div>Developed by</div>
-        <img src="img/david.png">
-        <span class="name">David Stevens, CFII</span>
-        <span class="contact-btn">Click for about me / contact - Feedback welcome!</span>
-    </div>
+        <img alt="BalancedBird" src="img/logo-min.png">
+        <p>The free & easy-to-use aircraft weight & balance program.</p>
+        <div class="author">
+                <div>Developed by</div>
+            <a href="contact.html" class="author-wrapper">
+                <img src="img/david.png">
+                <span class="name">David Stevens, CFII</span>
+                <span class="contact-btn">Click for contact - Feedback welcome!</span>
+            </a>
+        </div>
     </div>
 </header>
 
 <div class="body">
-<section>
-    <h2>1. Aircraft Preset</h2>
-    <p>Presets are quick templates for common models. Always confirm exact values with your aircraft's POH.</p>
-    <div id="presets">
-        <div onclick="selectPreset(this)" class="preset_box active"><img style="margin-left: 33px;"
-                                                                         src="img/aircraft_graphics/eagle.jpg">
-            <div>No Preset</div>
+    <section>
+        <h2>1. Aircraft Preset</h2>
+        <p>Presets are quick templates for common models. Always confirm exact values with your aircraft's POH.</p>
+        <div id="presets">
+            <div onclick="selectPreset(this)" class="preset_box active"><img style="margin-left: 33px;"
+                                                                             src="img/aircraft_graphics/eagle.jpg">
+                <div>No Preset</div>
+            </div>
+            <div onclick="selectPreset(this)" class="preset_box"><img src="img/aircraft_graphics/C152_graphic.PNG">
+                <div>C152 USAA</div>
+            </div>
+            <!--<div onclick="selectPreset(this)" class="preset_box"><img style="margin-top: 20px;" src="img/aircraft_graphics/C172R_graphic.PNG">
+                <div>Cessna 172</div>
+            </div>-->
         </div>
-        <div onclick="selectPreset(this)" class="preset_box"><img src="img/aircraft_graphics/C152_graphic.PNG">
-            <div>C152 USAA</div>
+
+    </section>
+
+    <section>
+        <div class="section-header">
+            <h2>2. Weight & Balance</h2>
+            <p>Fill out each row as required. Fields without green underlining are computed for you.</p>
         </div>
-        <!--<div onclick="selectPreset(this)" class="preset_box"><img style="margin-top: 20px;" src="img/aircraft_graphics/C172R_graphic.PNG">
-            <div>Cessna 172</div>
-        </div>-->
-    </div>
 
-</section>
+        <div class="special-wrapper">
+            <table class="std">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
+                    <th></th>
+                    <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Max T/O Wt.</td>
+                    <td><input id="max_to_wt" placeholder="0"></td>
+                    <td>Max LDG Wt.</td>
+                    <td><input id="max_ldg_wt" placeholder="0"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-<section>
-    <div class="section-header">
-        <h2>2. Weight & Balance</h2>
-        <p>Fill out each row as required. Fields without green underlining are computed for you.</p>
-    </div>
+        <div class="table-wrapper wb">
+            <table class="wb">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
+                    <th title="Inches from a designated reference point, or datum, to the center of gravity of the airplane. This reference point, or datum, can vary based on the aircraft design, and is often, but not necessarily, the engine firewall.">
+                        Arm-CG (in)<span>?</span></th>
+                    <th title="A moment, when referring to aircraft weight and balance calculations, is the product of a weight (in pounds) and its arm (in inches). The resulting value, 'lbs-in', represents the rotational tendency of that weight about a reference point or datum.">
+                        Moment (lbs-in)<span>?</span></th>
+                </tr>
+                </thead>
+                <tbody class="wbrows">
+                <tr>
+                    <td>Empty Wt.</td>
+                    <td><input placeholder="0"></td>
+                    <td><input placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                </tr>
+                <tr>
+                    <td>Front Seats</td>
+                    <td><input placeholder="0"></td>
+                    <td><input placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                </tr>
+                <tr>
+                    <td>Middle Seats</td>
+                    <td><input placeholder="0"></td>
+                    <td><input placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                </tr>
+                <tr>
+                    <td>Rear Seats</td>
+                    <td><input placeholder="0"></td>
+                    <td><input placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                </tr>
+                <tr>
+                    <td>Baggage 1</td>
+                    <td><input placeholder="0"></td>
+                    <td><input placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                </tr>
+                <tr>
+                    <td>Baggage 2</td>
+                    <td><input placeholder="0"></td>
+                    <td><input placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                </tr>
+                <tr>
+                    <td>Zero Fuel Wt.</td>
+                    <td><input disabled placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-wrapper wb">
+            <table>
+                <colgroup>
+                    <col>
+                    <col style="min-width:200px;">
+                    <col>
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th></th>
+                    <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
+                    <th title="Inches from a designated reference point, or datum, to the center of gravity of the airplane. This reference point, or datum, can vary based on the aircraft design, and is often, but not necessarily, the engine firewall.">
+                        Arm-CG (in)<span>?</span></th>
+                    <th title="A moment, when referring to aircraft weight and balance calculations, is the product of a weight (in pounds) and its arm (in inches). The resulting value, 'lbs-in', represents the rotational tendency of that weight about a reference point or datum.">
+                        Moment (lbs-in)<span>?</span></th>
+                </tr>
+                </thead>
+                <tbody class="wbrows">
+                <tr>
+                    <td>Fuel</td>
+                    <td><input placeholder="0">
+                        <div class="gal-view"><span
+                                title="One gallon of 100LL Avgas weighs 6.01 lbs.">Gal<span>?</span> =</span><input
+                                placeholder="0"></div>
+                    </td>
+                    <td><input id="fuelarm" placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                </tr>
+                <tr>
+                    <td>Ramp Wt.</td>
+                    <td><input disabled placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                </tr>
+                <tr>
+                    <td>Start/Taxi Fuel</td>
+                    <td class="minus"><input placeholder="0">
+                        <div class="gal-view"><span
+                                title="One gallon of 100LL Avgas weighs 6.01 lbs.">Gal<span>?</span> =</span><input
+                                placeholder="0"></div>
+                    </td>
+                    <td><input disabled placeholder="0"></td>
+                    <td class="minus"><input disabled placeholder="0"></td>
+                </tr>
+                <tr>
+                    <td>T/O Wt.</td>
+                    <td><input disabled placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="special-wrapper">
+            <table class="std">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>GPH</th>
+                    <th></th>
+                    <th>Hours (ex: 1.5)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Fuel Burn Rate</td>
+                    <td><input id="burnrate" placeholder="0"></td>
+                    <td>Flight time</td>
+                    <td><input id="time" placeholder="0"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-wrapper wb">
+            <table class="wb">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
+                    <th title="Inches from a designated reference point, or datum, to the center of gravity of the airplane. This reference point, or datum, can vary based on the aircraft design, and is often, but not necessarily, the engine firewall.">
+                        Arm-CG (in)<span>?</span></th>
+                    <th title="A moment, when referring to aircraft weight and balance calculations, is the product of a weight (in pounds) and its arm (in inches). The resulting value, 'lbs-in', represents the rotational tendency of that weight about a reference point or datum.">
+                        Moment (lbs-in)<span>?</span></th>
+                </tr>
+                </thead>
+                <tbody class="wbrows">
+                <tr>
+                    <td>Fuel Burn</td>
+                    <td class="minus"><input disabled placeholder="0"></td>
+                    <td><input disabled placeholder="0"></td>
+                    <td class="minus"><input disabled placeholder="0"></td>
+                </tr>
+                <tr>
+                    <td>LDG Wt.</td>
+                    <td><input disabled placeholder="0" class="final-row"></td>
+                    <td><input disabled placeholder="0" class="final-row"></td>
+                    <td><input disabled placeholder="0" class="final-row"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="special-wrapper">
+            <table class="std">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Gal</th>
+                    <th></th>
+                    <th>Gal</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Fuel used</td>
+                    <td><input id="used" disabled placeholder="0"></td>
+                    <td>Fuel remaining</td>
+                    <td><input id="remain" disabled placeholder="0"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-    <div class="special-wrapper">
-        <table class="std">
-            <thead>
-            <tr>
-                <th></th>
-                <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
-                <th></th>
-                <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Max T/O Wt.</td>
-                <td><input id="max_to_wt" placeholder="0"></td>
-                <td>Max LDG Wt.</td>
-                <td><input id="max_ldg_wt" placeholder="0"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <section>
+        <h2>3. Limits</h2>
+        <p>Auto-computed for this preset. If no preset is selected these must be determined manually.</p>
 
-    <div class="table-wrapper wb">
-        <table class="wb">
-            <thead>
-            <tr>
-                <th></th>
-                <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
-                <th title="Inches from a designated reference point, or datum, to the center of gravity of the airplane. This reference point, or datum, can vary based on the aircraft design, and is often, but not necessarily, the engine firewall.">
-                    Arm-CG (in)<span>?</span></th>
-                <th title="A moment, when referring to aircraft weight and balance calculations, is the product of a weight (in pounds) and its arm (in inches). The resulting value, 'lbs-in', represents the rotational tendency of that weight about a reference point or datum.">
-                    Moment (lbs-in)<span>?</span></th>
-            </tr>
-            </thead>
-            <tbody class="wbrows">
-            <tr>
-                <td>Empty Wt.</td>
-                <td><input placeholder="0"></td>
-                <td><input placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Front Seats</td>
-                <td><input placeholder="0"></td>
-                <td><input placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Middle Seats</td>
-                <td><input placeholder="0"></td>
-                <td><input placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Rear Seats</td>
-                <td><input placeholder="0"></td>
-                <td><input placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Baggage 1</td>
-                <td><input placeholder="0"></td>
-                <td><input placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Baggage 2</td>
-                <td><input placeholder="0"></td>
-                <td><input placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Zero Fuel Wt.</td>
-                <td><input disabled placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="table-wrapper wb">
-        <table>
-            <colgroup>
-                <col>
-                <col style="min-width:200px;">
-                <col>
-                <col>
-            </colgroup>
-            <thead>
-            <tr>
-                <th></th>
-                <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
-                <th title="Inches from a designated reference point, or datum, to the center of gravity of the airplane. This reference point, or datum, can vary based on the aircraft design, and is often, but not necessarily, the engine firewall.">
-                    Arm-CG (in)<span>?</span></th>
-                <th title="A moment, when referring to aircraft weight and balance calculations, is the product of a weight (in pounds) and its arm (in inches). The resulting value, 'lbs-in', represents the rotational tendency of that weight about a reference point or datum.">
-                    Moment (lbs-in)<span>?</span></th>
-            </tr>
-            </thead>
-            <tbody class="wbrows">
-            <tr>
-                <td>Fuel</td>
-                <td><input placeholder="0">
-                    <div class="gal-view"><span
-                            title="One gallon of 100LL Avgas weighs 6.01 lbs.">Gal<span>?</span> =</span><input
-                            placeholder="0"></div>
-                </td>
-                <td><input id="fuelarm" placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Ramp Wt.</td>
-                <td><input disabled placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>Start/Taxi Fuel</td>
-                <td class="minus"><input placeholder="0">
-                    <div class="gal-view"><span
-                            title="One gallon of 100LL Avgas weighs 6.01 lbs.">Gal<span>?</span> =</span><input
-                            placeholder="0"></div>
-                </td>
-                <td><input disabled placeholder="0"></td>
-                <td class="minus"><input disabled placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>T/O Wt.</td>
-                <td><input disabled placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="special-wrapper">
-        <table class="std">
-            <thead>
-            <tr>
-                <th></th>
-                <th>GPH</th>
-                <th></th>
-                <th>Hours (ex: 1.5)</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Fuel Burn Rate</td>
-                <td><input id="burnrate" placeholder="0"></td>
-                <td>Flight time</td>
-                <td><input id="time" placeholder="0"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="table-wrapper wb">
-        <table class="wb">
-            <thead>
-            <tr>
-                <th></th>
-                <th title="The weight in pounds for this category.">Weight(lbs)<span>?</span></th>
-                <th title="Inches from a designated reference point, or datum, to the center of gravity of the airplane. This reference point, or datum, can vary based on the aircraft design, and is often, but not necessarily, the engine firewall.">
-                    Arm-CG (in)<span>?</span></th>
-                <th title="A moment, when referring to aircraft weight and balance calculations, is the product of a weight (in pounds) and its arm (in inches). The resulting value, 'lbs-in', represents the rotational tendency of that weight about a reference point or datum.">
-                    Moment (lbs-in)<span>?</span></th>
-            </tr>
-            </thead>
-            <tbody class="wbrows">
-            <tr>
-                <td>Fuel Burn</td>
-                <td class="minus"><input disabled placeholder="0"></td>
-                <td><input disabled placeholder="0"></td>
-                <td class="minus"><input disabled placeholder="0"></td>
-            </tr>
-            <tr>
-                <td>LDG Wt.</td>
-                <td><input disabled placeholder="0" class="final-row"></td>
-                <td><input disabled placeholder="0" class="final-row"></td>
-                <td><input disabled placeholder="0" class="final-row"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="special-wrapper">
-        <table class="std">
-            <thead>
-            <tr>
-                <th></th>
-                <th>Gal</th>
-                <th></th>
-                <th>Gal</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Fuel used</td>
-                <td><input id="used" disabled placeholder="0"></td>
-                <td>Fuel remaining</td>
-                <td><input id="remain" disabled placeholder="0"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-
-<section>
-    <h2>3. Limits</h2>
-    <p>Auto-computed for this preset. If no preset is selected these must be determined manually.</p>
-
-    <div class="table-wrapper">
-        <table class="std">
-            <tr>
-                <td>Max T/O Wt.</td>
-                <td>0</td>
-                <td>Max LDG Wt.</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>T/O CG fwd/aft</td>
-                <td>0</td>
-                <td>LDG CG fwd/aft</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>0 Fuel CG fwd/aft</td>
-                <td>0</td>
-                <td>Max Crosswind</td>
-                <td>0</td>
-            </tr>
-        </table>
-    </div>
-</section>
-
-<section id="weather">
-    <h2>4. Current Conditions</h2>
-    <p>Enter an airport identifier. Weather information will be automatically acquired from the FAA.</p>
-    <input onkeydown="checkEnter(event)" id="weather-input" placeholder="Ex. KDTO">
-    <button type="button" onclick="submitAirportId()">Load Airport Information</button>
-
-    <h6 style="display:none;" id="weather-text"></h6>
-
-
-    <div id="weather-table" style="display: none">
         <div class="table-wrapper">
             <table class="std">
                 <tr>
-                    <td>Airport</td>
+                    <td>Max T/O Wt.</td>
+                    <td>0</td>
+                    <td>Max LDG Wt.</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>T/O CG</td>
+                    <td>0</td>
+                    <td>LDG CG</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Zero Fuel CG</td>
+                    <td>0</td>
+                    <td>Max Crosswind</td>
+                    <td>0</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <section id="weather">
+        <h2>4. Current Conditions</h2>
+        <p>Enter an airport identifier. Weather information will be automatically acquired from the FAA.</p>
+        <input onkeydown="checkEnter(event)" id="weather-input" placeholder="Ex. KDTO">
+        <button type="button" onclick="submitAirportId()">Load Airport Information</button>
+
+        <h6 style="display:none;" id="weather-text"></h6>
+
+
+        <div id="weather-table" style="display: none">
+            <div class="table-wrapper">
+                <table class="std">
+                    <tr>
+                        <td>Airport</td>
+                        <td></td>
+                        <td>Best Runway</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Observation</td>
+                        <td></td>
+                        <td>Xwind</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Surface Wind</td>
+                        <td></td>
+                        <td>Hwind</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Vis / Weather</td>
+                        <td></td>
+                        <td>Field Elevation</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Temp / Dew Pt.</td>
+                        <td></td>
+                        <td>Pressure Alt.</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Altimeter</td>
+                        <td></td>
+                        <td>Density Alt.</td>
+                        <td></td>
+                    </tr>
+
+                </table>
+            </div>
+            <p>Note: Use peak wind (PK WND) values as your max crosswind value when those values exist.</p>
+
+
+            <h4>Latest Surface Analysis & Forecast:</h4>
+            <p>(Click to enlarge)</p>
+
+            <div class="image-container">
+
+                <a href="https://www.wpc.ncep.noaa.gov/sfc/namfntsfcwbg.gif" target="_blank">
+                    <img class="image-container" src="https://www.wpc.ncep.noaa.gov/sfc/namfntsfcwbg.gif"/>
+                </a>
+
+                <a href="https://www.wpc.ncep.noaa.gov/noaa/noaad1.gif?1731912894" target="_blank">
+                    <img class="image-container" src="https://www.wpc.ncep.noaa.gov/noaa/noaad1.gif?1731912894"/>
+                </a>
+
+            </div>
+
+            <div><p><a href="https://aviationweather.gov/gfa/#obs" target="_blank">Click to view weather radar on
+                aviationweather.gov</a></p></div>
+
+            <h4>Airport Diagram PDF:</h4>
+            <p>(Use PDF controls to print or view larger)</p>
+            <iframe src="https://aeronav.faa.gov/d-tpp/2411/05866AD.PDF" width="500" height="800"></iframe>
+
+        </div>
+
+    </section>
+
+    <section>
+        <h2>5. Performance Profile</h2>
+        <p>Auto-computed for this preset & weather data. If no preset is selected these must be determined manually.</p>
+
+        <div class="table-wrapper">
+            <table class="std">
+                <tr>
+                    <td>Expected Runway</td>
                     <td></td>
-                    <td>Best Runway</td>
+                    <td>Runway Length</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Observation</td>
-                    <td></td>
-                    <td>Xwind</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Surface Wind</td>
-                    <td></td>
-                    <td>Hwind</td>
+                    <td>T/O GRND Roll</td>
+                    <td>0</td>
+                    <td>LDG GRND Roll</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Vis / Weather</td>
-                    <td></td>
-                    <td>Field Elevation</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Temp / Dew Pt.</td>
-                    <td></td>
-                    <td>Pressure Alt.</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Altimeter</td>
-                    <td></td>
-                    <td>Density Alt.</td>
-                    <td></td>
+                    <td>T/O Dist (50')</td>
+                    <td>0</td>
+                    <td>LDG Dist (50')</td>
+                    <td>0</td>
                 </tr>
 
             </table>
         </div>
-        <p>Note: Use peak wind (PK WND) values as your max crosswind value when those values exist.</p>
 
+    </section>
 
-        <h4>Latest Surface Analysis & Forecast:</h4>
-        <p>(Click to enlarge)</p>
+    <section>
+        <h2>6. Aircraft Reference Speeds SE/ME</h2>
+        <p>Autofilled by your preset. Irrelevant fields are left empty.</p>
 
-        <div class="image-container">
-
-        <a href="https://www.wpc.ncep.noaa.gov/sfc/namfntsfcwbg.gif" target="_blank">
-            <img class="image-container" src="https://www.wpc.ncep.noaa.gov/sfc/namfntsfcwbg.gif" />
-        </a>
-
-        <a href="https://www.wpc.ncep.noaa.gov/noaa/noaad1.gif?1731912894" target="_blank">
-            <img class="image-container" src="https://www.wpc.ncep.noaa.gov/noaa/noaad1.gif?1731912894" />
-        </a>
-
+        <div class="table-wrapper">
+            <table class="std">
+                <tr>
+                    <td>Vr</td>
+                    <td>?</td>
+                    <td>Vxse</td>
+                    <td>?</td>
+                </tr>
+                <tr>
+                    <td>Vle</td>
+                    <td>?</td>
+                    <td>Vg</td>
+                    <td>?</td>
+                </tr>
+                <tr>
+                    <td>50' Obst. Clearance</td>
+                    <td>?</td>
+                    <td>Vyse</td>
+                    <td>?</td>
+                </tr>
+                <tr>
+                    <td>Vlo</td>
+                    <td>?</td>
+                    <td>Vmc</td>
+                    <td>?</td>
+                </tr>
+                <tr>
+                    <td>Vx</td>
+                    <td>?</td>
+                    <td>Vs0</td>
+                    <td>?</td>
+                </tr>
+                <tr>
+                    <td>Va Max</td>
+                    <td>?</td>
+                    <td>Vapp Short</td>
+                    <td>?</td>
+                </tr>
+                <tr>
+                    <td>Vy</td>
+                    <td>?</td>
+                    <td>Vs1</td>
+                    <td>?</td>
+                </tr>
+                <tr>
+                    <td>Vno</td>
+                    <td>?</td>
+                    <td>Vapp Normal</td>
+                    <td>?</td>
+                </tr>
+                <tr>
+                    <td>Vcc</td>
+                    <td>?</td>
+                    <td>Vfe</td>
+                    <td>?</td>
+                </tr>
+                <tr>
+                    <td>Vne</td>
+                    <td>?</td>
+                    <td>Vapp Flapless</td>
+                    <td>?</td>
+                </tr>
+            </table>
         </div>
 
-        <div><p><a href="https://aviationweather.gov/gfa/#obs" target="_blank">Click to view weather radar on aviationweather.gov</a></p></div>
+        <h4>V-Speed definitions:</h4>
+        <p>In aviation, V-speeds refer to a set of defined airspeeds that are used to ensure safe operation of an
+            aircraft. These speeds are critical for both normal and emergency flight conditions and are unique to each
+            aircraft as defined by the manufacturer.</p>
 
-        <h4>Airport Diagram PDF:</h4>
-        <p>(Use PDF controls to print or view larger)</p>
-        <iframe src="https://aeronav.faa.gov/d-tpp/2411/05866AD.PDF" width="500" height="800"></iframe>
+        <ul>
+            <li>
+                <strong>Vr (Rotation Speed)</strong>
+                <ul>
+                    <li>The speed at which the pilot begins to pull back on the control column to rotate the aircraft
+                        during takeoff.
+                    </li>
+                    <li>This lifts the aircraft’s nose off the runway to start climbing.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vxse (Single Engine Service Ceiling)</strong>
+                <ul>
+                    <li>The best speed to climb with one engine inoperative in multi-engine aircraft.</li>
+                    <li>Ensures maximum altitude gain per horizontal distance.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vle (Landing Gear Extended Speed)</strong>
+                <ul>
+                    <li>The maximum speed at which the aircraft can safely fly with the landing gear extended.</li>
+                    <li>Exceeding this speed could damage the landing gear mechanism or airframe.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vg (Best Glide Speed)</strong>
+                <ul>
+                    <li>The speed that provides the best glide ratio in the event of engine failure.</li>
+                    <li>Allows the aircraft to cover the greatest distance without power.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vy (Best Rate of Climb Speed)</strong>
+                <ul>
+                    <li>The speed at which the aircraft gains the most altitude in the shortest time.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vyse (Best Rate of Climb Speed with One Engine Inoperative)</strong>
+                <ul>
+                    <li>The best rate of climb speed for a multi-engine aircraft with one engine inoperative.</li>
+                    <li>Ensures the highest altitude gain with limited power.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vlo (Landing Gear Operating Speed)</strong>
+                <ul>
+                    <li>The maximum speed at which the landing gear can be extended or retracted safely.</li>
+                    <li>Exceeding this speed can damage the gear mechanism.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vmc (Minimum Control Speed)</strong>
+                <ul>
+                    <li>The minimum speed at which a multi-engine aircraft can maintain controlled flight with one
+                        engine inoperative.
+                    </li>
+                    <li>Below this speed, even full deflection of the flight controls cannot overcome the yaw caused by
+                        asymmetrical thrust from the remaining engine.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vx (Best Angle of Climb Speed)</strong>
+                <ul>
+                    <li>The speed that provides the greatest altitude gain over the shortest horizontal distance.</li>
+                    <li>Used when obstacles near the runway must be cleared.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vs0 (Stall Speed in Landing Configuration)</strong>
+                <ul>
+                    <li>The minimum speed for level flight with flaps extended and landing gear down.</li>
+                    <li>This is the stall speed in the landing configuration.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vs1 (Stall Speed in a specific configuration (typically Clean Configuration)):</strong>
+                <ul>
+                    <li>The minimum speed at which the aircraft can maintain controlled flight in a specific
+                        configuration (typically Clean Configuration) (flaps up and landing gear retracted).
+                    </li>
+                    <li>Flying below this speed with insufficient lift will cause the aircraft to stall.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Va (Maneuvering Speed)</strong>
+                <ul>
+                    <li>The maximum speed at which full deflection of the flight controls can be made without
+                        overstressing the aircraft.
+                    </li>
+                    <li>Ensures the aircraft stalls before reaching structural limits during abrupt control inputs.</li>
+                    <li>This speed changes based on the weight of the aircraft. <a
+                            href="https://www.youtube.com/watch?v=Rh3z1lMQQHY">Youtube explanation</a></li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vapp Short (Approach Speed for Short Field Landing)</strong>
+                <ul>
+                    <li>The recommended approach speed for short-field landings.</li>
+                    <li>Allows for a steeper descent angle and safe margin above stall speed.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vapp Normal (Approach Speed for Normal Landing)</strong>
+                <ul>
+                    <li>The standard approach speed for normal landings.</li>
+                    <li>Used on longer runways where a gradual approach is acceptable.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vcc (Cruise Climb Speed)</strong>
+                <ul>
+                    <li>The climb speed designed for prolonged climbs to balance cooling airflow through the engine,
+                        fuel efficiency, and performance. It is higher than Vy and is selected to avoid overheating the
+                        engine while maintaining a gradual climb.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vfe (Maximum Flap Extended Speed)</strong>
+                <ul>
+                    <li>The maximum speed for flying with flaps extended.</li>
+                    <li>Exceeding this speed can overstress the flaps and airframe.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vne (Never Exceed Speed)</strong>
+                <ul>
+                    <li>The maximum speed that the aircraft should never exceed.</li>
+                    <li>Flying above this speed could cause structural failure.</li>
+                </ul>
+            </li>
+        </ul>
 
-    </div>
-
-</section>
-
-<section>
-<h2>5. Performance Profile</h2>
-    <p>Auto-computed for this preset & weather data. If no preset is selected these must be determined manually.</p>
-
-<div class="table-wrapper">
-    <table class="std">
-        <tr>
-            <td>Expected Runway</td>
-            <td></td>
-            <td>Runway Length</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>T/O GRND Roll</td>
-            <td>0</td>
-            <td>LDG GRND Roll</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>T/O Dist (50')</td>
-            <td>0</td>
-            <td>LDG Dist (50')</td>
-            <td>0</td>
-        </tr>
-
-    </table>
-</div>
-
-</section>
-
-<section>
-    <h2>6. Aircraft Reference Speeds SE/ME</h2>
-    <p>Autofilled by your preset. Irrelevant fields are left empty.</p>
-
-    <div class="table-wrapper">
-        <table class="std">
-            <tr>
-                <td>Vr</td>
-                <td>?</td>
-                <td>Vxse</td>
-                <td>?</td>
-            </tr>
-            <tr>
-                <td>Vle</td>
-                <td>?</td>
-                <td>Vg</td>
-                <td>?</td>
-            </tr>
-            <tr>
-                <td>50' Obst. Clearance</td>
-                <td>?</td>
-                <td>Vyse</td>
-                <td>?</td>
-            </tr>
-            <tr>
-                <td>Vlo</td>
-                <td>?</td>
-                <td>Vmc</td>
-                <td>?</td>
-            </tr>
-            <tr>
-                <td>Vx</td>
-                <td>?</td>
-                <td>Vs0</td>
-                <td>?</td>
-            </tr>
-            <tr>
-                <td>Va Max</td>
-                <td>?</td>
-                <td>Vapp Short</td>
-                <td>?</td>
-            </tr>
-            <tr>
-                <td>Vy</td>
-                <td>?</td>
-                <td>Vs1</td>
-                <td>?</td>
-            </tr>
-            <tr>
-                <td>Vno</td>
-                <td>?</td>
-                <td>Vapp Normal</td>
-                <td>?</td>
-            </tr>
-            <tr>
-                <td>Vcc</td>
-                <td>?</td>
-                <td>Vfe</td>
-                <td>?</td>
-            </tr>
-            <tr>
-                <td>Vne</td>
-                <td>?</td>
-                <td>Vapp Flapless</td>
-                <td>?</td>
-            </tr>
-        </table>
-    </div>
-
-    <h4>V-Speed definitions:</h4>
-    <p>In aviation, V-speeds refer to a set of defined airspeeds that are used to ensure safe operation of an aircraft. These speeds are critical for both normal and emergency flight conditions and are unique to each aircraft as defined by the manufacturer.</p>
-
-    <ul>
-        <li>
-            <strong>Vr (Rotation Speed)</strong>
-            <ul>
-                <li>The speed at which the pilot begins to pull back on the control column to rotate the aircraft during takeoff.</li>
-                <li>This lifts the aircraft’s nose off the runway to start climbing.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vxse (Single Engine Service Ceiling)</strong>
-            <ul>
-                <li>The best speed to climb with one engine inoperative in multi-engine aircraft.</li>
-                <li>Ensures maximum altitude gain per horizontal distance.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vle (Landing Gear Extended Speed)</strong>
-            <ul>
-                <li>The maximum speed at which the aircraft can safely fly with the landing gear extended.</li>
-                <li>Exceeding this speed could damage the landing gear mechanism or airframe.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vg (Best Glide Speed)</strong>
-            <ul>
-                <li>The speed that provides the best glide ratio in the event of engine failure.</li>
-                <li>Allows the aircraft to cover the greatest distance without power.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vy (Best Rate of Climb Speed)</strong>
-            <ul>
-                <li>The speed at which the aircraft gains the most altitude in the shortest time.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vyse (Best Rate of Climb Speed with One Engine Inoperative)</strong>
-            <ul>
-                <li>The best rate of climb speed for a multi-engine aircraft with one engine inoperative.</li>
-                <li>Ensures the highest altitude gain with limited power.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vlo (Landing Gear Operating Speed)</strong>
-            <ul>
-                <li>The maximum speed at which the landing gear can be extended or retracted safely.</li>
-                <li>Exceeding this speed can damage the gear mechanism.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vmc (Minimum Control Speed)</strong>
-            <ul>
-                <li>The minimum speed at which a multi-engine aircraft can maintain controlled flight with one engine inoperative.</li>
-                <li>Below this speed, even full deflection of the flight controls cannot overcome the yaw caused by asymmetrical thrust from the remaining engine.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vx (Best Angle of Climb Speed)</strong>
-            <ul>
-                <li>The speed that provides the greatest altitude gain over the shortest horizontal distance.</li>
-                <li>Used when obstacles near the runway must be cleared.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vs0 (Stall Speed in Landing Configuration)</strong>
-            <ul>
-                <li>The minimum speed for level flight with flaps extended and landing gear down.</li>
-                <li>This is the stall speed in the landing configuration.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vs1 (Stall Speed in a specific configuration (typically Clean Configuration)):</strong>
-            <ul>
-                <li>The minimum speed at which the aircraft can maintain controlled flight in a specific configuration (typically Clean Configuration) (flaps up and landing gear retracted).</li>
-                <li>Flying below this speed with insufficient lift will cause the aircraft to stall.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Va (Maneuvering Speed)</strong>
-            <ul>
-                <li>The maximum speed at which full deflection of the flight controls can be made without overstressing the aircraft.</li>
-                <li>Ensures the aircraft stalls before reaching structural limits during abrupt control inputs.</li>
-                <li>This speed changes based on the weight of the aircraft. <a href="https://www.youtube.com/watch?v=Rh3z1lMQQHY">Youtube explanation</a></li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vapp Short (Approach Speed for Short Field Landing)</strong>
-            <ul>
-                <li>The recommended approach speed for short-field landings.</li>
-                <li>Allows for a steeper descent angle and safe margin above stall speed.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vapp Normal (Approach Speed for Normal Landing)</strong>
-            <ul>
-                <li>The standard approach speed for normal landings.</li>
-                <li>Used on longer runways where a gradual approach is acceptable.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vcc (Cruise Climb Speed)</strong>
-            <ul>
-                <li>The climb speed designed for prolonged climbs to balance cooling airflow through the engine, fuel efficiency, and performance. It is higher than Vy and is selected to avoid overheating the engine while maintaining a gradual climb.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vfe (Maximum Flap Extended Speed)</strong>
-            <ul>
-                <li>The maximum speed for flying with flaps extended.</li>
-                <li>Exceeding this speed can overstress the flaps and airframe.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vne (Never Exceed Speed)</strong>
-            <ul>
-                <li>The maximum speed that the aircraft should never exceed.</li>
-                <li>Flying above this speed could cause structural failure.</li>
-            </ul>
-        </li>
-    </ul>
-
-</section>
+    </section>
 
 
-
-<footer>
-    <p>This program is open source software under the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> license. Have a safe flight.</p>
-    <p>Balanced Bird developed by David Stevens. Copyright 2024. FOR TRAINING PURPOSES ONLY - Not a substitute for legally thorough pre-flight planning.</p>
-    <p>GitHub Repository: <a href="https://github.com/mu-arch/balancedbird">https://github.com/mu-arch/balancedbird</a>
-    </p>
-</footer>
+    <footer>
+        <p>This program is open source software under the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC
+            BY-NC-SA 4.0</a> license.</p>
+        <p>Balanced Bird developed by David Stevens. Copyright 2024. FOR TRAINING PURPOSES ONLY - Not a substitute for
+            legally thorough pre-flight planning.</p>
+        <p>GitHub Repository: <a
+                href="https://github.com/mu-arch/balancedbird">https://github.com/mu-arch/balancedbird</a>
+        </p>
+    </footer>
 </div>
 
 </body>

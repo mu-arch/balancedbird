@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BalancedBird - Weight & Balance App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <img alt="BalancedBird" src="img/logo-min.png">
+</header>
+
+<div class="body contact-body">
+    <img src="img/david_fullsize.jpg">
+    <h2>David Stevens, CFII</h2>
+    <p>I’m a Certified Flight Instructor + Instrument instructor with 11 years of flying experience and a lifelong enjoyment of programming. I made Balancedbird, and it's companion app as a fun side project. Please reach out if you would like a feature added or have any questions.</p>
+    <p>Email Address: <b id="email">unloaded@email.com</b></p>
+
+    <footer>
+        <p>This program is open source software under the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC
+            BY-NC-SA 4.0</a> license.</p>
+        <p>Balanced Bird developed by David Stevens. Copyright 2024. FOR TRAINING PURPOSES ONLY - Not a substitute for
+            legally thorough pre-flight planning.</p>
+        <p>GitHub Repository: <a
+                href="https://github.com/mu-arch/balancedbird">https://github.com/mu-arch/balancedbird</a>
+        </p>
+    </footer>
+</div>
+</body>
+</html>
+
+<script>
+    var user = "4pcbqfkrn4";
+    var domain = "privaterelay.appleid.com";
+    document.getElementById("email").innerHTML = '<a href="mailto:' + user + '@' + domain + '">' + user + '@' + domain + '</a>';
+</script>
+

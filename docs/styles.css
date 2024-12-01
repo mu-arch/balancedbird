@@ -54,18 +54,24 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", Arial, sans-serif;
 }
 
+b {
+    font-weight: bold;
+}
+
 header {
-    padding: 30px 50px 40px 50px;
+    padding: 30px 50px 25px 50px;
     margin: 0 0 20px 0;
     position: relative;
     background-color: #f8f8f8;
-    border-bottom: 1px solid #dfdfdf;
+    border-bottom: 1px solid #8e8e8e;
+    background-image: url("img/lacie-slezak-7ZaFhK3LNVE-unsplash.jpg");
+    background-size: cover;
+    background-position: center center;
 }
 
 .header-content {
-margin:auto;
+    margin:auto;
     max-width: 900px;
-
 }
 
 .body {
@@ -74,37 +80,59 @@ margin:auto;
     max-width: 1000px;
 }
 
+.contact-body {
+    max-width: 900px;
+}
+
+.contact-body img {
+    padding: 10px;
+    border:1px solid #b6b6b6;
+}
+
+.contact-body p {
+    max-width: 500px;
+}
+
 header p {
-    width: 650px;
-    font-size: 20px;
-    line-height: 30px;
+    width: 300px;
+    font-size: 28px;
+    line-height: 35px;
+
 }
 
 header img:first-child {
     max-width: 200px;
     position: relative;
-    left: -10px;
+
     margin-bottom: 20px;
 }
 
 .author {
     margin-top: 10px;
     cursor: pointer;
+}
 
+.author-wrapper {
+    background-color: rgba(255,255,255, .5);
+    background: linear-gradient(to right, rgba(255,255,255, 1), rgba(0, 0, 0, 0));
+    display: inline-block;
+    width: 320px;
+    height: 55px;
+    border-radius: 100px;
 }
 
 header .author img {
-    width: 45px;
-    height: 45px;
+    width: 55px;
+    height: 55px;
     border-radius: 200px;
     display: inline-block;
 }
 
-.author div {
+.author div:first-child {
     text-transform: uppercase;
     font-weight: bold;
     font-size: 12px;
-    padding: 0 0 13px 0;
+    padding: 0 0 18px 0;
     color: rgba(0,0,0,.5);
 }
 
@@ -116,18 +144,18 @@ header .author img {
 .author .name {
     background-color: rgba(0, 0, 0, 0.9);
     color: #fff;
-    padding: 3px 10px;
+    padding: 4px 10px;
     border-radius: 100px;
-    margin: 4px 15px;
+    margin: 9px 15px;
     font-weight: 700;
     font-size: 12px;
 }
 
 .author .contact-btn {
-    padding: 27px 19px;
+    padding: 35px 19px;
     font-weight: 500;
     font-size: 12px;
-    color: #656565;
+    color: #000000;
 }
 
 h1 {
@@ -418,6 +446,12 @@ strong {
     font-weight: bold;
 }
 
+
+footer {
+    margin-top:40px;
+    padding-top: 20px;
+    border-top: 1px solid #d5d5d5;
+}
 
 footer img {
     width: 100px;
