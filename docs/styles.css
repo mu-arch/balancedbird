@@ -110,11 +110,12 @@ header img:first-child {
 .author {
     margin-top: 10px;
     cursor: pointer;
+    margin-bottom: 10px;
 }
 
 .author-wrapper {
     background-color: rgba(255,255,255, .5);
-    background: linear-gradient(to right, rgba(255,255,255, 1), rgba(0, 0, 0, 0));
+    background: linear-gradient(to right, rgba(255,255,255, .5), rgba(0, 0, 0, 0));
     display: inline-block;
     width: 320px;
     height: 55px;
