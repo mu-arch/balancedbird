@@ -118,7 +118,7 @@ header img:first-child {
     background: linear-gradient(to right, rgba(255,255,255, .5), rgba(0, 0, 0, 0));
     display: inline-block;
     width: 320px;
-    height: 55px;
+    height: 57px;
     border-radius: 100px;
 }
 
@@ -127,6 +127,7 @@ header .author img {
     height: 55px;
     border-radius: 200px;
     display: inline-block;
+    border: 1px solid #fff;
 }
 
 .author div:first-child {
