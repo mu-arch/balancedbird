@@ -29,11 +29,11 @@
         <h2>1. Aircraft Preset</h2>
         <p>Presets are quick templates for common models. Always confirm exact values with your aircraft's POH.</p>
         <div id="presets">
-            <div onclick="selectPreset(this)" class="preset_box active"><img style="margin-left: 33px;"
+            <div onclick="selectPreset(null)" class="preset_box active"><img style="margin-left: 33px;"
                                                                              src="img/aircraft_graphics/eagle_min.jpg">
                 <div>No Preset</div>
             </div>
-            <div onclick="selectPreset(this)" class="preset_box"><img src="img/aircraft_graphics/c152.jpg">
+            <div onclick="selectPreset('c152usaa')" class="preset_box"><img src="img/aircraft_graphics/c152.jpg">
                 <div>C152 USAA</div>
             </div>
             <!--<div onclick="selectPreset(this)" class="preset_box"><img style="margin-top: 20px;" src="img/aircraft_graphics/C172R_graphic.PNG">
@@ -46,7 +46,7 @@
     <section>
         <div class="section-header">
             <h2>2. Weight & Balance</h2>
-            <p>Fill out each row as required. Fields without green underlining are computed for you.</p>
+            <p>Fill out each row as required. Fields <b>not underlined</b> in green are computed for you.</p>
         </div>
 
         <div class="special-wrapper">
@@ -62,9 +62,9 @@
                 <tbody>
                 <tr>
                     <td>Max T/O Wt.</td>
-                    <td><input id="max_to_wt" placeholder="0"></td>
+                    <td><input id="max_to_wt"></td>
                     <td>Max LDG Wt.</td>
-                    <td><input id="max_ldg_wt" placeholder="0"></td>
+                    <td><input id="max_ldg_wt"></td>
                 </tr>
                 </tbody>
             </table>
@@ -252,7 +252,7 @@
         </div>
     </section>
 
-    <section>
+    <section id="limits">
         <h2>3. Limits</h2>
         <p>Auto-computed for this preset. If no preset is selected these must be determined manually.</p>
 
@@ -374,15 +374,15 @@
                 </tr>
                 <tr>
                     <td>T/O GRND Roll</td>
-                    <td>0</td>
+                    <td></td>
                     <td>LDG GRND Roll</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>T/O Dist (50')</td>
-                    <td>0</td>
+                    <td></td>
                     <td>LDG Dist (50')</td>
-                    <td>0</td>
+                    <td></td>
                 </tr>
 
             </table>
@@ -475,24 +475,16 @@
                 </ul>
             </li>
             <li>
-                <strong>Vxse (Single Engine Service Ceiling)</strong>
+                <strong>50' Obst. Clearance</strong>
                 <ul>
-                    <li>The best speed to climb with one engine inoperative in multi-engine aircraft.</li>
-                    <li>Ensures maximum altitude gain per horizontal distance.</li>
+                    <li>The speed needed to clear a 50ft obstacle at the end of the runway, which would be whatever speed provides the best angle of climb, Vx.</li>
                 </ul>
             </li>
             <li>
-                <strong>Vle (Landing Gear Extended Speed)</strong>
+                <strong>Vx (Best Angle of Climb Speed)</strong>
                 <ul>
-                    <li>The maximum speed at which the aircraft can safely fly with the landing gear extended.</li>
-                    <li>Exceeding this speed could damage the landing gear mechanism or airframe.</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Vg (Best Glide Speed)</strong>
-                <ul>
-                    <li>The speed that provides the best glide ratio in the event of engine failure.</li>
-                    <li>Allows the aircraft to cover the greatest distance without power.</li>
+                    <li>The speed that provides the greatest altitude gain over the shortest horizontal distance.</li>
+                    <li>Used when obstacles near the runway must be cleared.</li>
                 </ul>
             </li>
             <li>
@@ -502,35 +494,12 @@
                 </ul>
             </li>
             <li>
-                <strong>Vyse (Best Rate of Climb Speed with One Engine Inoperative)</strong>
+                <strong>Vcc (Cruise Climb Speed)</strong>
                 <ul>
-                    <li>The best rate of climb speed for a multi-engine aircraft with one engine inoperative.</li>
-                    <li>Ensures the highest altitude gain with limited power.</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Vlo (Landing Gear Operating Speed)</strong>
-                <ul>
-                    <li>The maximum speed at which the landing gear can be extended or retracted safely.</li>
-                    <li>Exceeding this speed can damage the gear mechanism.</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Vmc (Minimum Control Speed)</strong>
-                <ul>
-                    <li>The minimum speed at which a multi-engine aircraft can maintain controlled flight with one
-                        engine inoperative.
+                    <li>The climb speed designed for prolonged climbs to balance cooling airflow through the engine,
+                        fuel efficiency, and performance. It is higher than Vy and is selected to avoid overheating the
+                        engine while maintaining a gradual climb.
                     </li>
-                    <li>Below this speed, even full deflection of the flight controls cannot overcome the yaw caused by
-                        asymmetrical thrust from the remaining engine.
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <strong>Vx (Best Angle of Climb Speed)</strong>
-                <ul>
-                    <li>The speed that provides the greatest altitude gain over the shortest horizontal distance.</li>
-                    <li>Used when obstacles near the runway must be cleared.</li>
                 </ul>
             </li>
             <li>
@@ -550,6 +519,13 @@
                 </ul>
             </li>
             <li>
+                <strong>Vfe (Maximum Flap Extended Speed)</strong>
+                <ul>
+                    <li>The maximum speed for flying with flaps extended.</li>
+                    <li>Exceeding this speed can overstress the flaps and airframe.</li>
+                </ul>
+            </li>
+            <li>
                 <strong>Va (Maneuvering Speed)</strong>
                 <ul>
                     <li>The maximum speed at which full deflection of the flight controls can be made without
@@ -558,6 +534,29 @@
                     <li>Ensures the aircraft stalls before reaching structural limits during abrupt control inputs.</li>
                     <li>This speed changes based on the weight of the aircraft. <a
                             href="https://www.youtube.com/watch?v=Rh3z1lMQQHY">Youtube explanation</a></li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vno (Normal Operating Speed)</strong>
+                <ul>
+                    <li>Also known as maximum structural cruising speed.</li>
+                    <li>Below this speed the aircraft is certified to withstand substantial wind gusts without experiencing structural damage. </li>
+                    <li>Flying above Vno puts the aircraft in the "Limit" speed range, increasing stress on the structure.</li>
+                    <li>Do not exceed Vno, except in Smooth Air, and only with caution.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vne (Never Exceed Speed)</strong>
+                <ul>
+                    <li>The maximum speed that the aircraft should never exceed.</li>
+                    <li>Flying above this speed could cause structural failure.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vg (Best Glide Speed)</strong>
+                <ul>
+                    <li>The speed that provides the best glide ratio in the event of engine failure.</li>
+                    <li>Allows the aircraft to cover the greatest distance without power.</li>
                 </ul>
             </li>
             <li>
@@ -575,26 +574,51 @@
                 </ul>
             </li>
             <li>
-                <strong>Vcc (Cruise Climb Speed)</strong>
+                <strong>Vapp Flapless (Approach Speed for Flapless Landing)</strong>
                 <ul>
-                    <li>The climb speed designed for prolonged climbs to balance cooling airflow through the engine,
-                        fuel efficiency, and performance. It is higher than Vy and is selected to avoid overheating the
-                        engine while maintaining a gradual climb.
+                    <li>The recommended approach speed for landings without using flaps.</li>
+                    <li>Requires a higher speed to maintain lift and control without the additional lift from flaps.</li>
+                    <li>Provides a safe margin above stall speed, ensuring stable handling during the approach.</li>
+                </ul>
+            </li>
+
+            <li>
+            <strong>Vxse (Single Engine Service Ceiling)</strong>
+                <ul>
+                    <li>The best speed to climb with one engine inoperative in multi-engine aircraft.</li>
+                    <li>Ensures maximum altitude gain per horizontal distance.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vyse (Best Rate of Climb Speed with One Engine Inoperative)</strong>
+                <ul>
+                    <li>The best rate of climb speed for a multi-engine aircraft with one engine inoperative.</li>
+                    <li>Ensures the highest altitude gain with limited power.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vle (Landing Gear Extended Speed)</strong>
+                <ul>
+                    <li>The maximum speed at which the aircraft can safely fly with the landing gear extended.</li>
+                    <li>Exceeding this speed could damage the landing gear mechanism or airframe.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vlo (Landing Gear Operating Speed)</strong>
+                <ul>
+                    <li>The maximum speed at which the landing gear can be extended or retracted safely.</li>
+                    <li>Exceeding this speed can damage the gear mechanism.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Vmc (Minimum Control Speed)</strong>
+                <ul>
+                    <li>The minimum speed at which a multi-engine aircraft can maintain controlled flight with one
+                        engine inoperative.
                     </li>
-                </ul>
-            </li>
-            <li>
-                <strong>Vfe (Maximum Flap Extended Speed)</strong>
-                <ul>
-                    <li>The maximum speed for flying with flaps extended.</li>
-                    <li>Exceeding this speed can overstress the flaps and airframe.</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Vne (Never Exceed Speed)</strong>
-                <ul>
-                    <li>The maximum speed that the aircraft should never exceed.</li>
-                    <li>Flying above this speed could cause structural failure.</li>
+                    <li>Below this speed, even full deflection of the flight controls cannot overcome the yaw caused by
+                        asymmetrical thrust from the remaining engine.
+                    </li>
                 </ul>
             </li>
         </ul>
