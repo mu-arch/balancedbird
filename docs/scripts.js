@@ -260,61 +260,8 @@ function checkEnter(event) {
 function getRandomDelay() {
     return Math.floor(Math.random() * (2000 - 100 + 1)) + 500;
 }
-/*
-function submitAirportId() {
-    const airportId = document.getElementById('weather-input').value.trim().toUpperCase();
 
-    document.getElementById('weather-table').style.display = "none";
-    document.getElementById('weather-text').style.display = "block";
 
-    if (airportId.length === 0) {
-        document.getElementById('weather-text').innerHTML = "Airport ICAO identifier cannot be empty.";
-
-        return
-    }
-
-    document.getElementById('weather-text').innerHTML = loader + " Please wait. Contacting FAA systems...";
-
-    delay(400, function() {
-        document.getElementById('weather-text').innerHTML = loader + " Web scraping and compiling sources...";
-
-        delay(300, function() {
-            document.getElementById('weather-text').innerHTML = loader + " Acquiring latest weather observation from aviationweather.gov...";
-
-            delay(1000, function() {
-
-                var http = new XMLHttpRequest();
-                var url = 'http://127.0.0.1:3000/weather/' + airportId;
-                http.open('GET', url, true);
-
-                http.onreadystatechange = function() {
-                    if (http.readyState == 4) {
-                        if (http.status == 200) {
-                            var response = JSON.parse(http.responseText);
-                            updateWeatherTable(response);
-
-                            document.getElementById('weather-text').innerHTML = response.raw_ob || 'N/A';
-                            document.getElementById('weather-table').style.display = "block";
-                        } else {
-                            let metar_error = "Something went wrong. The weather system may be down or the server is not responding.";
-                            document.getElementById('weather-text').innerHTML = metar_error;
-                        }
-                    }
-                };
-                http.send();
-            });
-        });
-    });
-
-    // Utility function to create delays
-    function delay(duration, callback) {
-        setTimeout(callback, duration);
-    }
-}
-
- */
-
-// Utility function to create delays
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -447,3 +394,7 @@ const zuluToLocalReadableTime = zulu => {
     // Convert to local time string
     return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 };
+
+function selectPreset () {
+
+}
