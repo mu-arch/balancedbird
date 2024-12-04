@@ -1,4 +1,35 @@
 {
   "max_takeoff_weight": 1710,
-  "max_xwind": 12
+  "max_xwind": 12,
+  "vspeeds" : {
+    "vr": 50,
+    "50ft": 55,
+    "vx": 55,
+    "vy": 67,
+    "vcc": 80,
+    "vxse": null,
+    "vyse": null,
+    "vs0": 43,
+    "vs1": 48,
+    "vfe": 85,
+    "vle": null,
+    "vlo": null,
+    "vamax": "variable",
+    "vno": 111,
+    "vne": 149,
+    "vg": 60,
+    "vmc": null,
+    "vappshort": 54,
+    "vappnormal": "55-65",
+    "vappflapless": "60-70"
+  },
+  "designloadfactorflapsup": "+4.4g -1.76g",
+  "designloadfactorflapsdown": "+3.5g",
+  "loadfactornotes": "*The design load factors are 150% of the above, and in all cases, the structure meets or exceeds design loads",
+  "totalfuel": "26g",
+  "fuelunusable": "1.5g",
+  "approvedfuels": "100, 100LL",
+  "flaplimitlanding": "10°-30°",
+  "flaplimittakeoff": "10°",
+  "oilrange": "4-6q"
 }

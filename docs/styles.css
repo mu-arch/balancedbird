@@ -109,7 +109,6 @@ header img:first-child {
 
 .author {
     margin-top: 10px;
-    cursor: pointer;
     margin-bottom: 10px;
 }
 
@@ -120,6 +119,7 @@ header img:first-child {
     width: 320px;
     height: 57px;
     border-radius: 100px;
+    cursor: pointer;
 }
 
 header .author img {
