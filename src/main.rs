@@ -30,8 +30,8 @@ async fn main() {
         .route("/", get(|| async { "Sup" }))
         .route("/weather/:code", get(helper::weather_handler))
         .layer(cors);
-
-    // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8880").await.unwrap();
+    
+    //bind to global
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:80").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }

@@ -282,7 +282,7 @@ async function submitAirportId() {
     try {
 
         // Initiate the web request immediately using fetch
-        const response = await fetch('https://api.balancedbird.org:8880/weather/' + airportId);
+        const response = await fetch('https://api.balancedbird.org/weather/' + airportId);
 
         if (!response.ok) {
             throw new Error(await response.text());
