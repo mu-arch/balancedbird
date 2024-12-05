@@ -282,7 +282,7 @@ async function submitAirportId() {
     try {
 
         // Initiate the web request immediately using fetch
-        const response = await fetch('http://127.0.0.1:3000/weather/' + airportId);
+        const response = await fetch('http://comfy.cybermancy.org:53653/weather/' + airportId);
 
         if (!response.ok) {
             throw new Error(await response.text());
@@ -361,15 +361,6 @@ function updateWeatherTable(response) {
     rows[5].cells[3].innerHTML = response.density_altitude ? `${response.density_altitude}ft` : 'Not available';
 }
 
-// Event listener for the "Load Airport Information" button
-document.querySelector('button[onclick="submitAirportId()"]').addEventListener('click', submitAirportId);
-
-// Optional: Handle Enter key press in the input field
-document.getElementById('weather-input').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        submitAirportId();
-    }
-});
 
 // Helper functions to parse visibility and weather from raw_ob
 function parseVisibility(ob) {
