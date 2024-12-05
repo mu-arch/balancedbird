@@ -32,6 +32,6 @@ async fn main() {
         .layer(cors);
 
     // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:53653").await.unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:8880").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
