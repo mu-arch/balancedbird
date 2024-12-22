@@ -199,15 +199,14 @@ function calc_wb(lastInputElement) {
 }
 
 function recompute(lastInput) {
-    setWtLimits(Number(document.getElementById("max_to_wt").value), Number(document.getElementById("max_ldg_wt").value))
     calc_wb(lastInput)
 }
 
 // Bind the calculateValues function to the input change events
-document.querySelectorAll("input").forEach(function (input) {
-    input.addEventListener("input", function (event) {
-        recompute(input); // passing the current input as an argument
-    });
+e("wab").addEventListener("input", function (event) {
+    if (event.target.tagName === "INPUT") {
+        recompute(event.target); // passing the current input as an argument
+    }
 });
 
 /*
@@ -295,7 +294,7 @@ async function submitAirportId() {
 
     } catch (error) {
         // Handle errors gracefully
-        document.getElementById('weather-text').innerHTML = "Balancedbird was unable to process your request. Check your ICAO code or contact the developer.";
+        document.getElementById('weather-text').innerHTML = error.message;
     }
 }
 

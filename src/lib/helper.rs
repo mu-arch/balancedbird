@@ -14,16 +14,16 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
     
     // Fetch METAR step
     let metar = rx::fetch_metar_data(&code).await
-        .ok_or((StatusCode::BAD_GATEWAY, "Failed to fetch METAR data. That airport may not exist or isn't currently reporting."))?;
+        .ok_or((StatusCode::INTERNAL_SERVER_ERROR, "Failed to fetch METAR data. That airport may not exist or isn't currently reporting."))?;
     
     // Fetch airport data from Airnav step
     let airnav_page_data = rx::fetch_html(format!("https://www.airnav.com/airport/{}", &code))
         .await
-        .ok_or((StatusCode::BAD_GATEWAY, "Network error while downloading airport data"))?;
+        .ok_or((StatusCode::INTERNAL_SERVER_ERROR, "Network error while downloading airport data"))?;
 
     // Extract airport information from the scraper
     let extracted_airport_data = extract_airport_info(&airnav_page_data)
-        .ok_or((StatusCode::NOT_FOUND, "Airport not found"))?;
+        .ok_or((StatusCode::INTERNAL_SERVER_ERROR, "Airport not found"))?;
 
     // Perform calculations
     let pressure_altitude = calculate_pressure_altitude(metar.altim, extracted_airport_data.field_elevation);
