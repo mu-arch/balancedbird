@@ -1,6 +1,6 @@
 {
   "model": "152",
-  "max_takeoff_weight": 1670,
+  "max_takeoff_weight": 1710,
   "max_xwind": 12,
   "vspeeds" : {
     "vr": 50,

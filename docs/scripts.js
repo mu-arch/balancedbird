@@ -22,6 +22,10 @@ function roundToTwo(num) {
     return +(Math.round(num + "e+2") + "e-2");
 }
 
+function e(element) {
+    return document.getElementById(element)
+}
+
 function w(element, value) {
     element.value = roundToTwo(Number(value))
 }
@@ -242,14 +246,6 @@ inputFields.forEach(inputField => {
     inputField.addEventListener('input', stripCharacters);
 });
 
-function selectPreset(element) {
-    document.getElementById('presets').querySelectorAll(':scope > div').forEach(child => {
-        child.classList.remove('active');
-    });
-
-    element.classList.add('active');
-}
-
 function checkEnter(event) {
     if (event.key === 'Enter') {  // If Enter key is pressed
         event.preventDefault();  // Prevent form submission (default behavior)
@@ -276,12 +272,11 @@ async function submitAirportId() {
         document.getElementById('weather-text').innerHTML = "Airport ICAO identifier cannot be empty.";
         return;
     }
-    document.getElementById('weather-text').innerHTML = loader + " Downloading and processing FAA.gov airport database...";
+    document.getElementById('weather-text').innerHTML = loader + " Communicating with FAA sources...";
 
 
     try {
 
-        // Initiate the web request immediately using fetch
         const response = await fetch('https://api.balancedbird.org/weather/' + airportId);
 
         if (!response.ok) {
@@ -295,15 +290,12 @@ async function submitAirportId() {
         document.getElementById('weather-text').innerHTML = loader + " Acquiring latest observation from aviationweather.gov...";
 
 
-        // Perform the second delay of 300ms
-        await delay(1200);
-
         document.getElementById('weather-text').innerHTML = data.raw_ob || 'N/A';
         document.getElementById('weather-table').style.display = "block";
 
     } catch (error) {
         // Handle errors gracefully
-        document.getElementById('weather-text').innerHTML = error.message;
+        document.getElementById('weather-text').innerHTML = "Balancedbird was unable to process your request. Check your ICAO code or contact the developer.";
     }
 }
 
@@ -386,6 +378,35 @@ const zuluToLocalReadableTime = zulu => {
     return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 };
 
-function selectPreset () {
+function selectPreset (element, preset_string) {
 
+    document.getElementById('presets').querySelectorAll(':scope > div').forEach(child => {
+        child.classList.remove('active');
+    });
+
+    element.classList.add('active');
+
+    if (preset_string) {
+        return
+    }
+
+    fetch('https://balancedbird.org/presets/' + preset_string + '.json')
+        .then(async response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            loadPreset(await response.json())
+        })
+        .catch(error => {
+            console.error("Error fetching the JSON file:", error);
+        });
+}
+
+function loadPreset(preset) {
+    e("ok63").value = preset.max_takeoff_weight;
+    e("r063").value = preset.max_takeoff_weight;
+
+    e("o063").value = preset.max_takeoff_weight;
+    e("F063").value = preset.max_takeoff_weight;
+    e("5mjn").value = preset.max_xwind;
 }

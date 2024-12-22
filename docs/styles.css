@@ -67,6 +67,8 @@ header {
     background-image: url("img/banner_min.jpg");
     background-size: cover;
     background-position: center center;
+    color: #fff;
+    font-weight: bold;
 }
 
 .header-content {
@@ -114,7 +116,7 @@ header img:first-child {
 
 .author-wrapper {
     background-color: rgba(255,255,255, .5);
-    background: linear-gradient(to right, rgba(255,255,255, .5), rgba(0, 0, 0, 0));
+    background: linear-gradient(to right, rgba(255,255,255, 1), rgba(0, 0, 0, 0));
     display: inline-block;
     width: 320px;
     height: 57px;
@@ -135,7 +137,7 @@ header .author img {
     font-weight: bold;
     font-size: 12px;
     padding: 0 0 18px 0;
-    color: rgba(0,0,0,.5);
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .author span {

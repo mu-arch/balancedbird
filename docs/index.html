@@ -29,16 +29,19 @@
         <h2>1. Aircraft Preset</h2>
         <p>Presets are quick templates for common models. Always confirm exact values with your aircraft's POH.</p>
         <div id="presets">
-            <div onclick="selectPreset(null)" class="preset_box active"><img style="margin-left: 33px;"
+            <div onclick="selectPreset(this, null)" class="preset_box active"><img style="margin-left: 33px;"
                                                                              src="img/aircraft_graphics/eagle_min.jpg">
                 <div>No Preset</div>
             </div>
-            <div onclick="selectPreset('c152usaa')" class="preset_box"><img src="img/aircraft_graphics/c152.jpg">
+            <div onclick="selectPreset(this, 'c152usaa')" class="preset_box"><img src="img/aircraft_graphics/c152.jpg">
                 <div>C152 USAA</div>
             </div>
-            <!--<div onclick="selectPreset(this)" class="preset_box"><img style="margin-top: 20px;" src="img/aircraft_graphics/C172R_graphic.PNG">
-                <div>Cessna 172</div>
-            </div>-->
+            <div onclick="selectPreset(this, '1976c172M')" class="preset_box"><img style="margin-top: 20px;" src="img/aircraft_graphics/C172R_graphic.PNG">
+                <div>1976 C172M</div>
+            </div>
+            <div onclick="selectPreset(this, '1976c172M')" class="preset_box"><img style="margin-top: 20px;" src="">
+                <div>PA-34 USAA</div>
+            </div>
         </div>
 
     </section>
@@ -62,9 +65,9 @@
                 <tbody>
                 <tr>
                     <td>Max T/O Wt.</td>
-                    <td><input id="max_to_wt"></td>
+                    <td><input id="ok63"></td>
                     <td>Max LDG Wt.</td>
-                    <td><input id="max_ldg_wt"></td>
+                    <td><input id="r063"></td>
                 </tr>
                 </tbody>
             </table>
@@ -260,21 +263,21 @@
             <table class="std">
                 <tr>
                     <td>Max T/O Wt.</td>
-                    <td></td>
+                    <td><input id="o063"></td>
                     <td>Max LDG Wt.</td>
-                    <td></td>
+                    <td><input id="F063"></td>
                 </tr>
                 <tr>
                     <td>T/O CG</td>
-                    <td></td>
+                    <td><input id="o0d3"></td>
                     <td>LDG CG</td>
-                    <td></td>
+                    <td><input id="on63"></td>
                 </tr>
                 <tr>
                     <td>Zero Fuel CG</td>
-                    <td></td>
+                    <td><input id="5mbn"></td>
                     <td>Max Crosswind</td>
-                    <td></td>
+                    <td><input id="5mjn"></td>
                 </tr>
             </table>
         </div>
@@ -331,7 +334,7 @@
 
                 </table>
             </div>
-            <p>Note: Use peak wind (PK WND) values as your max crosswind value when those values exist.</p>
+            <p>Sources: faa.gov, aviationweather.gov, airnav.com, <a href="https://github.com/mu-arch/balancedbird/blob/master/src/lib/helper.rs">view source</a></p>
 
 
             <h4>Latest Surface Analysis & Forecast:</h4>
@@ -382,6 +385,12 @@
                     <td>T/O Dist (50')</td>
                     <td></td>
                     <td>LDG Dist (50')</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>ASDA</td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                 </tr>
 
