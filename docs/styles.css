@@ -190,12 +190,14 @@ h6 {
     font-size: 12px;
     letter-spacing: 1px;
     cursor: pointer;
+    transition-duration: 200ms;
 }
 
 .preset_box:hover {
     border: 2px solid blue;
     box-shadow: 0 5px 15px rgba(39, 147, 255, 0.4);
     color: blue;
+    transform: translate(0, -10px);
 }
 
 .preset_box.active {
