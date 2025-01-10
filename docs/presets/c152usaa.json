@@ -1,5 +1,6 @@
 {
   "model": "152",
+  "poh_url": "https://balancedbird.org/POH/152.pdf",
   "max_takeoff_weight": 1710,
   "max_xwind": 12,
   "vspeeds" : {
@@ -25,7 +26,7 @@
     "vappflapless": "60-70"
   },
   "limits": {
-    "limitspage": 94,
+    "page": 94,
     "bounds": [
       [31,1000],
       [31,1350],
