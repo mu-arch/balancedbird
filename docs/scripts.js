@@ -385,7 +385,7 @@ function selectPreset (element, preset_string) {
 
     element.classList.add('active');
 
-    if (preset_string) {
+    if (!preset_string) {
         return
     }
 
@@ -402,10 +402,12 @@ function selectPreset (element, preset_string) {
 }
 
 function loadPreset(preset) {
+
     e("ok63").value = preset.max_takeoff_weight;
     e("r063").value = preset.max_takeoff_weight;
 
     e("o063").value = preset.max_takeoff_weight;
     e("F063").value = preset.max_takeoff_weight;
     e("5mjn").value = preset.max_xwind;
+    e("n933").innerHTML = `<iframe src="${preset.poh_url}#page=${preset.limits.page}" style="border: none;"></iframe>`;
 }
