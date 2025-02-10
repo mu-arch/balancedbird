@@ -12,8 +12,16 @@ mod helper;
 #[path = "lib/rx.rs"]
 mod rx;
 
+#[path = "lib/routes.rs"]
+mod routes;
+
+#[path = "lib/error.rs"]
+mod errors;
+
 #[path = "test/helper.rs"]
 mod _test_helper;
+
+
 
 #[tokio::main]
 async fn main() {
@@ -28,7 +36,8 @@ async fn main() {
     // Define web server routes
     let app = Router::new()
         .route("/", get(|| async { "Sup" }))
-        .route("/weather/:code", get(helper::weather_handler))
+        //.route("/weather/:code", get(routes::weather_handler))
+        .route("/airport/{code}", get(routes::amr_handler))
         .layer(cors);
 
     //bind to global

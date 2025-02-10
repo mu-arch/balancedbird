@@ -87,7 +87,14 @@ pub struct MetarDataRaw {
     pub raw_ob: String,
     pub name: String,
     pub wgst: Option<i32>,
-    pub wpk: Option<i32>
+    pub wpk: Option<WindDirection>,
+    pub clouds: Vec<CloudLayer>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct CloudLayer {
+    pub cover: String,
+    pub base: Option<f64>,
 }
 
 struct Metar {
@@ -96,4 +103,47 @@ struct Metar {
     gust: Option<f64>,
     peak_wind_dir: Option<i32>,
     peak_wind_speed: Option<f64>,
+}
+
+
+// starting AMR stuff
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct AMR {
+    pub(crate) identifier: String,
+    pub(crate) units: String,
+    pub(crate) summary: Summary,
+
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Summary {
+    pub(crate) coordinates: Coordinates,
+    pub(crate) elevation: f64,
+    pub(crate) magnetic_variation: MagneticVariation,
+    pub(crate) nearby_city: String,
+    pub(crate) artcc: String,
+    pub(crate) sectional_chart: String,
+    pub(crate) tz: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct MagneticVariation {
+    pub(crate) value: i32,
+    pub(crate) direction: String,
+    pub(crate) year: i32,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Coordinates {
+    pub(crate) latitude: DMS,
+    pub(crate) longitude: DMS,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct DMS {
+    pub(crate) degrees: i32,
+    pub(crate) minutes: i32,
+    pub(crate) seconds: f64,
+    pub(crate) direction: String,
 }

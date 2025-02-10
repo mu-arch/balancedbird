@@ -1,41 +1,112 @@
-use std::cmp::Ordering;
 use std::f64::consts::PI;
-use axum::extract::Path;
-use axum::http::{StatusCode};
-use axum::Json;
-use crate::types::{AirportInfo, WeatherDataReturned, Runway, WindDirection};
-use chrono::{Datelike, NaiveDate, TimeZone, Utc, Local};
+use itertools::Itertools;
+use axum::http::StatusCode;
+use crate::types::{AirportInfo, Coordinates, MagneticVariation, MetarDataRaw, Runway, RunwayDataReturned, Summary, WindComponents, WindDirection, AMR, DMS};
 use scraper::{ElementRef, Html, Selector};
+use crate::errors::AppErrorExternal;
 use crate::types;
-use crate::rx;
 
-// Handler function for the /weather/:code route
-pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Json<WeatherDataReturned>), (StatusCode, &'static str)> {
+pub fn normalize_angle(angle: f64) -> f64 {
+    let mut normalized = angle % 360.0;
+    if normalized < 0.0 {
+        normalized += 360.0;
+    }
+    normalized
+}
+fn signed_angle_difference(angle1: f64, angle2: f64) -> f64 {
+    let angle1 = normalize_angle(angle1);
+    let angle2 = normalize_angle(angle2);
+    let mut diff = angle1 - angle2;
+
+    if diff > 180.0 {
+        diff -= 360.0;
+    } else if diff < -180.0 {
+        diff += 360.0;
+    }
+
+    diff
+}
+pub fn calculate_wind_components(wind_speed: f64, wind_direction: i32, runway_heading: i32) -> (f64, f64) {
+    let angle_diff = signed_angle_difference(wind_direction as f64, runway_heading as f64);
+    let angle_radians = angle_diff * PI / 180.0;
+
+    let crosswind = ((wind_speed * angle_radians.sin()) * 100f64).round() / 100f64;
+    let headwind = ((wind_speed * angle_radians.cos()) * 100f64).round() / 100f64;
     
-    // Fetch METAR step
-    let metar = rx::fetch_metar_data(&code).await
-        .ok_or((StatusCode::INTERNAL_SERVER_ERROR, "Failed to fetch METAR data. That airport may not exist or isn't currently reporting."))?;
+
+    (crosswind, headwind)
+}
+
+pub fn calculate_pressure_altitude(altimeter_setting: f64, field_elevation: f64) -> f64 {
+    let standard_pressure = 1013.25; // in hPa
+    let pressure_altitude = field_elevation + (standard_pressure - altimeter_setting) * 30.0;
+
+    // Round to two decimal places
+    (pressure_altitude * 100.0).round() / 100.0
+}
+
+
+pub fn calculate_density_altitude(temp_c: f64, field_elevation: f64, altimeter_setting: f64) -> f64 {
+    let pressure_altitude = calculate_pressure_altitude(altimeter_setting, field_elevation);
+    let isa_temp = 15.0 - (0.00198 * field_elevation);
+    let density_altitude = pressure_altitude + (120.0 * (temp_c - isa_temp));
+    density_altitude.round() // Round to nearest whole number
+}
+
+// Function to convert hPa to inHg
+pub fn hpa_to_inhg(hpa: f64) -> f64 {
+    let conversion_factor = 0.029529983071445;
+    let result = hpa * conversion_factor;
+    (result * 100.0).round() / 100.0 // Round to 2 decimal places
+}
+
+
+// Function to convert Zulu time to local readable time
+/*
+fn zulu_to_local_readable_time(zulu: &str) -> String {
+    if zulu.len() < 6 {
+        return "Invalid Zulu time format".to_string();
+    }
+
+    let day: u32 = zulu[0..2].parse().unwrap_or(1);
+    let hour: u32 = zulu[2..4].parse().unwrap_or(0);
+    let minute: u32 = zulu[4..6].parse().unwrap_or(0);
+
+    let now = Utc::now();
+    let year = now.year();
+    let month = now.month();
+
+    if let Some(naive_date) = NaiveDate::from_ymd_opt(year, month, day) {
+        if let Some(naive_datetime) = naive_date.and_hms_opt(hour, minute, 0) {
+            let utc_datetime = Utc.from_utc_datetime(&naive_datetime);
+            let local_datetime = utc_datetime.with_timezone(&Local);
+            local_datetime.format("%-I:%M %p").to_string() // Format as 'hour:minute AM/PM'
+        } else {
+            "Invalid time".to_string()
+        }
+    } else {
+        "Invalid date".to_string()
+    }
+}
+
+ */
+/*
+pub fn build_runway_list(runways: Vec<Runway>, metar_data_raw: &MetarDataRaw) -> RunwayDataReturned {
     
-    // Fetch airport data from Airnav step
-    let airnav_page_data = rx::fetch_html(format!("https://www.airnav.com/airport/{}", &code))
-        .await
-        .ok_or((StatusCode::INTERNAL_SERVER_ERROR, "Network error while downloading airport data"))?;
-
-    // Extract airport information from the scraper
-    let extracted_airport_data = extract_airport_info(&airnav_page_data)
-        .ok_or((StatusCode::INTERNAL_SERVER_ERROR, "Airport not found"))?;
-
-    // Perform calculations
-    let pressure_altitude = calculate_pressure_altitude(metar.altim, extracted_airport_data.field_elevation);
-    let altimeter_inhg = hpa_to_inhg(metar.altim);
-    let density_altitude = calculate_density_altitude(
-        metar.temp,
-        extracted_airport_data.field_elevation,
-        metar.altim,
-    );
-
-    // Determine the best runway based on crosswind
+    let wind_dir = metar_data_raw.wdir;
     
+    for runway in runways {
+        
+    }
+    
+}
+
+ */
+
+/*
+pub fn compute_wind_components(heading_magnetic: f64, wind_speed: i32, wind_direction: i32) -> WindComponents {
+    
+    /*
     let best_runway_info = match metar.wdir {
         WindDirection::Degree(v) => {
             let best_runway_info = extracted_airport_data.runways.iter()
@@ -73,125 +144,14 @@ pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Js
     };
 
     let (best_runway, best_headwind, corresponding_crosswind,best_runway_heading_mag, gust_crosswind, gust_headwind ) = best_runway_info;
-
-
-
-    // Prepare the response data
-    // if the wind dir was VRB ignore basically all the values in the response because they will be zero or wrong because they do not apply at all since we cannot compute anything when with is VRB
-    let metar_data_returned = WeatherDataReturned {
-        metar_id: metar.metar_id,
-        temp: metar.temp,
-        dewp: metar.dewp,
-        wdir: metar.wdir,
-        wspd: metar.wspd,
-        wgst: metar.wgst,
-        altimeter: altimeter_inhg,
-        raw_ob: metar.raw_ob.clone(),
-        obs_time: extract_observation_time(&metar.raw_ob),
-        server_time: std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs().to_string(),
-        name: metar.name,
-        xwind: corresponding_crosswind,
-        hwind: best_headwind,
-        gxwind: gust_crosswind,
-        ghwind: gust_headwind,
-        pressure_altitude,
-        density_altitude,
-        best_runway: best_runway.number.clone(),
-        best_runway_heading_magnetic: best_runway_heading_mag,
-        runway_length: best_runway.length_ft,
-        field_elevation: extracted_airport_data.field_elevation,
-        diagram_link: extracted_airport_data.airport_diagram_link,
-    };
     
-    Ok((StatusCode::OK, Json(metar_data_returned)))
-}
+     */
 
-pub fn normalize_angle(angle: f64) -> f64 {
-    let mut normalized = angle % 360.0;
-    if normalized < 0.0 {
-        normalized += 360.0;
-    }
-    normalized
-}
-fn signed_angle_difference(angle1: f64, angle2: f64) -> f64 {
-    let angle1 = normalize_angle(angle1);
-    let angle2 = normalize_angle(angle2);
-    let mut diff = angle1 - angle2;
-
-    if diff > 180.0 {
-        diff -= 360.0;
-    } else if diff < -180.0 {
-        diff += 360.0;
-    }
-
-    diff
-}
-pub fn calculate_wind_components(wind_speed: f64, wind_direction: i32, runway_heading: i32) -> (f64, f64) {
-    let angle_diff = signed_angle_difference(wind_direction as f64, runway_heading as f64);
-    let angle_radians = angle_diff * PI / 180.0;
-
-    let crosswind = ((wind_speed * angle_radians.sin()) * 100f64).round() / 100f64;
-    let headwind = ((wind_speed * angle_radians.cos()) * 100f64).round() / 100f64;
-    
-
-    (crosswind, headwind)
-}
-
-fn calculate_pressure_altitude(altimeter_setting: f64, field_elevation: f64) -> f64 {
-    let standard_pressure = 1013.25; // in hPa
-    let pressure_altitude = field_elevation + (standard_pressure - altimeter_setting) * 30.0;
-
-    // Round to two decimal places
-    (pressure_altitude * 100.0).round() / 100.0
-}
-
-
-fn calculate_density_altitude(temp_c: f64, field_elevation: f64, altimeter_setting: f64) -> f64 {
-    let pressure_altitude = calculate_pressure_altitude(altimeter_setting, field_elevation);
-    let isa_temp = 15.0 - (0.00198 * field_elevation);
-    let density_altitude = pressure_altitude + (120.0 * (temp_c - isa_temp));
-    density_altitude.round() // Round to nearest whole number
-}
-
-// Function to convert hPa to inHg
-fn hpa_to_inhg(hpa: f64) -> f64 {
-    let conversion_factor = 0.029529983071445;
-    let result = hpa * conversion_factor;
-    (result * 100.0).round() / 100.0 // Round to 2 decimal places
-}
-
-
-// Function to convert Zulu time to local readable time
-/*
-fn zulu_to_local_readable_time(zulu: &str) -> String {
-    if zulu.len() < 6 {
-        return "Invalid Zulu time format".to_string();
-    }
-
-    let day: u32 = zulu[0..2].parse().unwrap_or(1);
-    let hour: u32 = zulu[2..4].parse().unwrap_or(0);
-    let minute: u32 = zulu[4..6].parse().unwrap_or(0);
-
-    let now = Utc::now();
-    let year = now.year();
-    let month = now.month();
-
-    if let Some(naive_date) = NaiveDate::from_ymd_opt(year, month, day) {
-        if let Some(naive_datetime) = naive_date.and_hms_opt(hour, minute, 0) {
-            let utc_datetime = Utc.from_utc_datetime(&naive_datetime);
-            let local_datetime = utc_datetime.with_timezone(&Local);
-            local_datetime.format("%-I:%M %p").to_string() // Format as 'hour:minute AM/PM'
-        } else {
-            "Invalid time".to_string()
-        }
-    } else {
-        "Invalid date".to_string()
-    }
 }
 
  */
 
-fn extract_observation_time(metar: &str) -> String {
+pub fn extract_observation_time(metar: &str) -> String {
     // Split the METAR string into whitespace-separated tokens
     let tokens: Vec<&str> = metar.split_whitespace().collect();
 
@@ -214,7 +174,7 @@ fn extract_observation_time(metar: &str) -> String {
 }
 
 
-fn extract_airport_info(html_content: &str) -> Option<AirportInfo> {
+pub fn extract_airport_info(html_content: &str) -> Option<AirportInfo> {
     let document = Html::parse_document(html_content);
 
     // Check the <title> element to determine if the airport exists
@@ -394,5 +354,124 @@ fn extract_airport_info(html_content: &str) -> Option<AirportInfo> {
         field_elevation: field_elevation.unwrap_or(0.0),
         runways,
         airport_diagram_link,
+    })
+}
+
+pub fn extract_airport_html(id: &str, html: &str) -> Result<AMR, AppErrorExternal> {
+
+    let mut data = AMR {
+        identifier: id.to_uppercase(),
+        units: "FAA".to_string(),
+        summary: Summary {
+            coordinates: Coordinates {
+                latitude: DMS {
+                    degrees: 0,
+                    minutes: 0,
+                    seconds: 0.0,
+                    direction: "N".to_string(),
+                },
+                longitude: DMS {
+                    degrees: 0,
+                    minutes: 0,
+                    seconds: 0.0,
+                    direction: "W".to_string(),
+                },
+            },
+            elevation: 0.0,
+            magnetic_variation: MagneticVariation {
+                value: 0,
+                direction: "N".to_string(),
+                year: 0,
+            },
+            nearby_city: "".to_string(),
+            artcc: "".to_string(),
+            sectional_chart: "".to_string(),
+            tz: "".to_string(),
+        },
+    };
+    
+    let document = Html::parse_document(html);
+    
+    let summary_table = document
+        .select(&Selector::parse("#summary table.table.table-condensed.table-borderless")?)
+        .next()
+        .ok_or(AppErrorExternal::Custom("Could not find the summary table".to_string()))?;
+
+    let row_selector = Selector::parse("tr")?;
+    let cell_selector = Selector::parse("td")?;
+
+    let mut lat_lon_raw = String::new();
+    let mut magvariation_raw = String::new();
+    
+    for row in summary_table.select(&row_selector) {
+        // The first <td> is our label, the second <td> is the value
+        let mut cells = row.select(&cell_selector);
+        let label = cells
+            .next()
+            .map(|td| td.text().collect::<String>().trim().to_lowercase());
+        let value = cells
+            .next()
+            .map(|td| td.text().collect::<String>().replace('\n', " ").trim().to_string());
+
+        //dbg!(&label, &value);
+
+        if let (Some(label), Some(value)) = (label, value) {
+            match label.as_str() {
+                "latitude/longitude" => lat_lon_raw = value,
+                "elevation" => data.summary.elevation = value.chars().filter(|c| c.is_numeric() || *c == '.').collect::<String>().parse()?,
+                "variation" => magvariation_raw = value,
+                "from city" => data.summary.nearby_city = value.split_whitespace().intersperse(" ").collect::<String>(),
+                "artcc" => data.summary.artcc = value,
+                "section chart" => data.summary.sectional_chart = value,
+                "time zone" => data.summary.tz = value,
+                _ => {}
+            }
+        }
+    }
+
+    { // parse the lag long
+        let parts: Vec<&str> = lat_lon_raw.split(" / ").collect();
+
+        let coordinates = Coordinates {
+            latitude: parse_dms(parts[0])?,
+            longitude: parse_dms(parts[1])?,
+        };
+        
+        data.summary.coordinates = coordinates;
+    }
+
+    { // parse mag variation
+        let parts: Vec<&str> = magvariation_raw.split_whitespace().collect();
+
+        data.summary.magnetic_variation = MagneticVariation {
+            value: parts[0].parse().expect("Invalid value"),
+            direction: parts[1].to_string(),
+            year: parts[2].parse().expect("Invalid year"),
+        }
+    }
+
+
+        Ok(data)
+}
+
+fn parse_dms(dms_str: &str) -> Result<DMS, AppErrorExternal> {
+    let parts: Vec<&str> = dms_str.trim().split_whitespace().collect();
+    let coords: Vec<&str> = parts[0].split('-').collect();
+
+    Ok(DMS {
+        degrees: coords[0].parse()?,
+        minutes: coords[1].parse()?,
+        seconds: coords[2].parse()?,
+        direction: parts[1].to_string(),
+    })
+}
+
+fn parse_magnetic_variation(input: &str) -> Result<MagneticVariation, AppErrorExternal> {
+    let parts: Vec<&str> = input.split_whitespace().collect();
+
+    Ok(MagneticVariation {
+        value: parts[0].parse()?,
+        direction: parts[1].to_string(),
+        year: parts[2].parse()?,
     })
 }

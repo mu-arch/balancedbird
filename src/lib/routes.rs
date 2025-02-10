@@ -5,11 +5,15 @@ use crate::{helper, types};
 use crate::rx;
 use chrono::{Datelike, NaiveDate, TimeZone, Utc, Local};
 use serde_json::json;
+use scraper::{Html, Selector};
 
-use crate::types::{WeatherDataReturned, WindDirection};
+
+use crate::types::{Coordinates, MagneticVariation, Summary, WeatherDataReturned, WindDirection, AMR, DMS};
 
 // Handler function for the /weather/:code route
 //pub async fn weather_handler(Path(code): Path<String>) -> Result<(StatusCode, Json<WeatherDataReturned>), (StatusCode, &'static str)> {
+
+/*
 pub async fn weather_handler(Path(code): Path<String>)
                              -> Result<(StatusCode, Json<serde_json::Value>), (StatusCode, &'static str)> {
 
@@ -76,4 +80,21 @@ pub async fn weather_handler(Path(code): Path<String>)
 
     //Ok((StatusCode::OK, Json(metar_data_returned)))
     Ok((StatusCode::OK, Json(json!({}))))
+}
+
+ */
+
+pub async fn amr_handler(Path(code): Path<String>)
+                         -> Result<(StatusCode, Json<AMR>), (StatusCode, &'static str)> {
+
+    let html = rx::fetch_html(format!("https://nfdc.faa.gov/nfdcApps/services/ajv5/airportDisplay.jsp?airportId={}", &code))
+        .await
+        .ok_or((StatusCode::INTERNAL_SERVER_ERROR, "Network error while downloading airport data"))?;
+
+    let json = match helper::extract_airport_html(&code, &html) {
+        Ok(json) => json,
+        Err(_) => return Err((StatusCode::INTERNAL_SERVER_ERROR, "Error parsing airport data")),
+    };
+    
+    Ok((StatusCode::OK, Json(json)))
 }
